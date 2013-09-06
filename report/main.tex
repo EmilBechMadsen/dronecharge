@@ -1,0 +1,84 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[11pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+%%% Examples of Article customizations
+% These packages are optional, depending whether you want the features they provide.
+% See the LaTeX Companion or other references for full information.
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{Project Drone Charge Proposal}
+\author{Miroslav Zoricak (mzor@itu.dk) \and Kamil Androsiuk (kami@itu.dk) \and Anders Emil Bech Madsen (aebm@itu.dk)}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+\section{Background and Motivation}
+Aerial Drones have a lot of potential use, but the use of commercially available drones are limited by the short amount of time they can stay airborne before requiring a recharge. Many applications could be considered where a drone would need to stay airborne for long periods of time to do various tasks. For instance, monitoring areas using various sensors or spreading pesticide on a field of crops.
+
+\section{Main Problem/Idea}
+Although battery life will increase as technology advances, there is a current need for alternatives. If drones could recharge themselves or somehow become sustainable this would increase the usage scenarios of drones significantly. Our idea is not to have drones stay airborne indefinitely, but to have the tasks that the drones are performing continue in spite of the need for a recharge. This could either be done by having other fully-charged drones take over the task or by allowing the drone to resume its task after it has been recharged.
+
+\section{Suggested solution}
+Our solution involves creating a framework that allows for applications to easily add autonomous recharge capabilities to their drone-applications. Application developers would provide means to locate and control the drone, as well as a task that the drone is supposed to perform. The framework would the interrupt the task and have the drone return to a charging station and either recharge and resume its task, or be replaced by another drone while it recharges. The drone would be required to be able to automatically dock to a charging station by landing on a platform that charges the drone. Once the drone is recharged or it becomes its turn to take over the task, it would resume the task in whatever state it was in.
+
+\section{Plan}
+We will start by outlining the framework and testing the recharge capabilities of drones through platform-charging. We will then develop the framework, and at the same time work on setting up a physical sample-application for the framework. Once the framework is completed, we will create an application that utilizes the framework to add recharge capabilities to a simple task in a controlled environment. This would involve writing the required application-dependent components such as location-tracking and movement controls.
+
+\section{Requirements for equipment, space, etc.}
+We will need:
+\begin{itemize}
+\item 3-5 Crazyflies (Probably this kind of drone) -- Depends on how fast you charge drones with coils.. Subject to test.
+\item 2-3 Charging coils (Sebastian showed us some coils for charging)
+\item HD Webcam for drone-tracking
+\item Might need a room for setting up a controlled environment for testing the drones, this should be later in the process once we set up our test-application.
+\end{itemize}
+\end{document}
