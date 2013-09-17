@@ -70,15 +70,24 @@ Although battery life will increase as technology advances, there is a current n
 \section{Suggested solution}
 Our solution involves creating a framework that allows for applications to easily add autonomous recharge capabilities to their drone-applications. Application developers would provide means to locate and control the drone, as well as a task that the drone is supposed to perform. The framework would the interrupt the task and have the drone return to a charging station and either recharge and resume its task, or be replaced by another drone while it recharges. The drone would be required to be able to automatically dock to a charging station by landing on a platform that charges the drone. Once the drone is recharged or it becomes its turn to take over the task, it would resume the task in whatever state it was in.
 
-\section{Plan}
-We will start by outlining the framework and testing the recharge capabilities of drones through platform-charging. We will then develop the framework, and at the same time work on setting up a physical sample-application for the framework. Once the framework is completed, we will create an application that utilizes the framework to add recharge capabilities to a simple task in a controlled environment. This would involve writing the required application-dependent components such as location-tracking and movement controls.
+\section{Stakeholders and evaluation}
+The main stakeholders in this project are drone application developers and drone manufacturers interested in integrating this functionality into their drones or drone-related projects. To gain access to their experience and understanding we intend to post surveys on various drone-related internet forums. Here, we would gauge their interest in this functionality and assess the framework from their feedback on how it would be to use. Due to time constraints, we do not intend to let application developers try the framework, but will simply explain how the framework is intended to be used and have them assess its value from that.
+
+\section{Plan \& Prototype iterations}
+We will work on the framework and the physical protoype in parallel, and have them synchronize with each other at various milestones in order to keep the products aligned. We will have four milestones as follows:
+
+\begin{itemize}
+\item \emph{Milestone 1:} The framework will support a drone taking off and landing when it runs out of power. The physical prototype will at this point utilize the framework in order to perform the task of staying airborne over the charger for the duration of the battery and have the framework land once the battery nears depletion.
+\item \emph{Milestone 2:} Movement functionality will be added to the framework, so that the drone can now hover at a random location and be returned to the charging station upon battery depletion. The physical prototype is now able to track the drones location and be issued movement commands from the framework.
+\item \emph{Milestone 3:} Once the first drone runs out of power, the framework will now send a second drone to replace it before returning the first drone to recharge. The physical prototype will not change.
+\item \emph{Milestone 4:} The framework will support the idea of tasks implemented as a series of movements by the driver. The physical prototype will define a task in the framework to be performed.
+\end{itemize}
 
 \section{Requirements for equipment, space, etc.}
 We will need:
 \begin{itemize}
 \item 3-5 Crazyflies (Probably this kind of drone) -- Depends on how fast you charge drones with coils.. Subject to test.
-\item 2-3 Charging coils (Sebastian showed us some coils for charging)
 \item HD Webcam for drone-tracking
-\item Might need a room for setting up a controlled environment for testing the drones, this should be later in the process once we set up our test-application.
+\item A room for setting up a controlled environment -- any of the small rooms in the corners will do.
 \end{itemize}
 \end{document}
