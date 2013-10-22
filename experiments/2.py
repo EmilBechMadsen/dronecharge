@@ -1,27 +1,28 @@
-import curses
 import time
 import sys
-stdscr = curses.initscr()
-curses.cbreak()
-stdscr.keypad(1)
+import cflib
+import cflib.crtp
+from cflib.crazyflie import Crazyflie
+from pprint import pprint
 
-stdscr.addstr(0,10,"Hit 'q' to quit")
-stdscr.refresh()
+cflib.crtp.init_drivers()
+available = cflib.crtp.scan_interfaces()
 
-key = ''
-while True:
-    key = stdscr.getch()
-    if key == ord('q'):
-    	curses.endwin()
-    	sys.exit(0)
+for i in available:
+	print("Interface with URI [%s] found and name/comment [%s]" % (i[0], i[1]))
 
-    stdscr.addch(20,25,key)
-    stdscr.refresh()
-    if key == curses.KEY_UP: 
-        stdscr.addstr(2, 20, "Up")
-    elif key == curses.KEY_DOWN: 
-        stdscr.addstr(3, 20, "Down")
+if len(available) < 2:
+	print("No drone interface found!")
+	sys.exit(0)
 
-    time.sleep(0.1)
+crazyflie = Crazyflie()
+crazyflie.open_link("radio://0/10/250K")
 
-curses.endwin()
+roll = 0.0
+pitch = 0.0
+yawrate = 0
+thrust = 10001
+crazyflie.commander.send_setpoint(roll, pitch, yawrate, thrust)
+
+time.sleep(0.1)
+crazyflie.close_link()
