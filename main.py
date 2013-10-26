@@ -12,9 +12,9 @@ environment.set_frame_of_reference(10, 10, 10)
 environment.set_origin(5, 5, 0)
 environment.add_charger(5, 5, 0)
 
-for i in range(4)
-	drone = Crazyflie("Drone " + str(i))
-	environment.add_drone(drone)
+for i in range(4):
+    drone = Crazyflie("Drone " + str(i))
+    environment.add_drone(drone)
 
 task = Task("Hover")
 
@@ -28,4 +28,4 @@ task.add_subtask(subtask)
 environment.set_task(task)
 
 a2b.set_environment(environment)
-a2b.start(timeout = 2 * 60 * 60)
+a2b.start(timeout=2 * 60 * 60)
