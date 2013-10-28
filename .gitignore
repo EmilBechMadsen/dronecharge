@@ -36,3 +36,4 @@ TSWLatexian*
 
 # Python
 *.pyc
+.idea

@@ -21,9 +21,9 @@ class Drone(object):
         # Angle to the Y axis
         self.angle = 0.0
 
-        self.pid_roll = PID(Kp=1, Kd=0.1, Ki=0.00025)
-        self.pid_pitch = PID(Kp=1, Kd=0.1, Ki=0.00025)
-        self.pid_yaw = PID(Kp=1, Kd=0.1, Ki=0.00025)
+        self.pid_roll = PID(Kp=1, Kd=0.4, Ki=0.00025)
+        self.pid_pitch = PID(Kp=1, Kd=0.4, Ki=0.00025)
+        self.pid_yaw = PID(Kp=10.0, Kd=0.0, Ki=0.0)
         self.pid_thrust = PID(Kp=0.1, Kd=0.1, Ki=0.00025)
 
         self.cf = Crazyflie(link=None, ro_cache="./cache", rw_cache="./cache")

@@ -14,7 +14,7 @@ def add_line(text, offset):
         (10, offset),
         cv2.FONT_HERSHEY_PLAIN,
         0.8,
-        (0, 0, 255)
+        (255, 255, 255)
     )
 
 window = cv2.namedWindow("win")
@@ -24,22 +24,24 @@ drone = Drone()
 
 ion()                           # interaction mode needs to be turned off
 
+r = 5
+
 x = np.arange(0, 100, 1)         # we'll create an x-axis from 0 to 2 pi
 yaw_error = np.arange(0, 100, 1, dtype="float")
 yaw_line, = plot(x, x, label="Yaw")
-yaw_line.axes.set_ylim(-350, 350)
+yaw_line.axes.set_ylim(-r, r)
 
 roll_error = np.arange(0, 100, 1, dtype="float")
 roll_line, = plot(x, x, label="Roll")
-roll_line.axes.set_ylim(-350, 350)
+roll_line.axes.set_ylim(-r, r)
 
 pitch_error = np.arange(0, 100, 1, dtype="float")
 pitch_line, = plot(x, x, label="Pitch")
-pitch_line.axes.set_ylim(-350, 350)
+pitch_line.axes.set_ylim(-r, r)
 
 legend()
 
-starttime = time.time()         # this is our start time
+starttime = None         # this is our start time
 t = 0                           # this is our relative start time
 prevImageCenter = [0, 0]
 prevTailCenter = [0, 0]
@@ -54,13 +56,25 @@ while True:
     if key == ord('r'):
         drone.reconnect()
 
+    if key == ord('w'):
+        starttime = time.time()
+
+    # auto thrust
+    if starttime and time.time() - starttime > 0.2:
+        drone.thrust = 40700
+    elif starttime:
+        drone.thrust = 50000
+
     # thrust
     if key == 63232:
-        drone.thrust += 1000
+        starttime = None
+        drone.thrust += 5000
     elif key == 63233:
-        drone.thrust -= 1000
+        starttime = None
+        drone.thrust -= 5000
     # emergency stop
     elif key == ord('s'):
+        starttime = None
         drone.stop()
 
     image = np.zeros((480, 640))
@@ -88,15 +102,21 @@ while True:
 
     drone.angle = angleFromCenterAndTail(imageCenter, tailCenter)
 
+    d2r = lambda(deg): deg * np.pi / 180.0
+
+
+    r_error = -(imageCenter[0] / 500.0) * np.cos(d2r(drone.angle))
+    p_error = (imageCenter[1] / 500.0) * np.cos(d2r(drone.angle))
+
     drone.update(
-        roll_error=-imageCenter[0],
-        pitch_error=imageCenter[1],
-        yaw_error=-drone.angle
+        #roll_error=r_error,
+        #pitch_error=p_error,
+        #yaw_error=-drone.angle
     )
 
     yaw_error = np.append(yaw_error, drone.angle)[1:]
-    roll_error = np.append(roll_error, imageCenter[1])[1:]
-    pitch_error = np.append(pitch_error, imageCenter[0])[1:]
+    roll_error = np.append(roll_error, r_error)[1:]
+    pitch_error = np.append(pitch_error, p_error)[1:]
 
     # update the plot data
     yaw_line.set_ydata(yaw_error)
@@ -105,11 +125,11 @@ while True:
 
     draw()
 
-    add_line("Roll  : {0:.4} {1:.4}".format(
-        drone.roll, drone.stabilizer_roll), 20)
-    add_line("Pitch : {0:.4} {1:.4}".format(
-        drone.pitch, drone.stabilizer_pitch), 40)
-    add_line("Yaw   : {0:.4} {1:.4}".format(
+    add_line("Roll  : {0:.4}".format(
+        drone.roll), 20)
+    add_line("Pitch : {0:.4}".format(
+        drone.pitch), 40)
+    add_line("Yaw   : {0:.4}".format(
         drone.yaw, drone.stabilizer_yaw), 60)
     add_line("Thrust: {0}".format(drone.thrust), 80)
     add_line("Bat   : {0}".format(drone.bat), 100)
