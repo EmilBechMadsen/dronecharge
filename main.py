@@ -8,24 +8,41 @@ a2b = DCKit()
 environment = Environment()
 
 # Growing Y is NORTH
-environment.set_frame_of_reference(10, 10, 10)
-environment.set_origin(5, 5, 0)
-environment.add_charger(5, 5, 0)
+environment.setFrameOfReference(10, 10, 10)
+environment.setOrigin(5, 5, 0)
+environment.addOharger(5, 5, 0)
 
 for i in range(4):
     drone = Crazyflie("Drone " + str(i))
-    environment.add_drone(drone)
+    environment.addDrone(drone)
 
-task = Task("Hover")
+task = Task("Record in a square")
 
-subtask = Task("Move")
-# subtask.add_drone("Drone 1")
-# subtask.add_drone_group(1)
-subtask.move_relative(0, 0, 1)
+rectask = RecordingTask("Start Recording")
+task.add(rectask)
 
-task.add_subtask(subtask)
+movetask = MovementTask("Move to A", (0,1,1))
+task.add(moveTask)
 
-environment.set_task(task)
 
-a2b.set_environment(environment)
+task.Start()
+
+foreach task in subtasks:
+task.run(drone)
+
+subtask = MovementTask("Move")
+# subtask.addDrone("Drone 1")
+# subtask.addDroneGroup(1)
+subtask.moveRelative(0, 0, 1)
+
+subtask = AVTask("Turn on video and bla")
+
+
+
+
+task.addSubtask(subtask)
+
+environment.setTask(task)
+
+a2b.setEnvironment(environment)
 a2b.start(timeout=2 * 60 * 60)
