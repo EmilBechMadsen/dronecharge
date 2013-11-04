@@ -34,7 +34,6 @@ class Task(object):
 
     def evaluate(self):
         currentSubtask = self.getCurrentSubtask()
-
         if currentSubtask is None:
             if self.isComplete():
                 self.state = TaskState.COMPLETE
@@ -63,16 +62,22 @@ class Task(object):
 
         for subtask in self.subtasks:
             currentSubtask = subtask.getCurrentSubtask()
+            # No children, not complete yet
+            if currentSubtask is None and subtask.state != TaskState.COMPLETE:
+                self.state = TaskState.EXECUTING # Must be about to execute.
+                return subtask
 
-            if currentSubtask is None or currentSubtask == TaskState.COMPLETE:
+            if (currentSubtask is None and subtask.state == TaskState.COMPLETE) or currentSubtask == TaskState.COMPLETE:
                 continue
 
             ready = currentSubtask.state == TaskState.READY
             executing = currentSubtask.state == TaskState.EXECUTING
 
             if ready or executing:
+                self.state = TaskState.EXECUTING # Must be about to execute.
                 return currentSubtask
 
+        self.state = TaskState.COMPLETE # Entire subtree complete means this is complete.
         return TaskState.COMPLETE
 
     def __repr__(self):

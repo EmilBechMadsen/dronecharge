@@ -10,7 +10,6 @@ class MovementTask(Task):
 
     def start(self):
         self.state = TaskState.EXECUTING
-        print(self)
 
         self.isCompleted = True
 
@@ -18,7 +17,8 @@ class MovementTask(Task):
         return self.isCompleted
 
     def __repr__(self):
-        ret = "\n\t<MovementTask (" + self.name + ")"
+        ret = "\n\t<MovementTask (" + self.name + ") "
+        ret += " State: " + str(self.state)
         if len(self.subtasks):
             ret += "\n\t" + str(self.subtasks) + "\n\t"
 

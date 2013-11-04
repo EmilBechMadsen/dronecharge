@@ -23,11 +23,16 @@ class DCKit(object):
         self.tasks.append(task)
 
     def _main_loop(self):
+        i = 0
         while True:
             # self.environment
             for task in self.tasks:
-                task.evaluate()
                 if task.state == TaskState.COMPLETE:
-                    break
+                    task.evaluate()
+                    print("DONE")
+                    return
+                task.evaluate()
+                print("\nIteration: " + str(i))
+                print(task)
 
-        print("DONE")
+            i += 1
