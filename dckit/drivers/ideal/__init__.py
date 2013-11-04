@@ -11,8 +11,8 @@ class Ideal(Drone):
     targetPosition = (0, 0, 0)
 
     """docstring for Crazyflie"""
-    def __init__(self):
-        super(Ideal, self).__init__()
+    def __init__(self, name, environment):
+        super(Ideal, self).__init__(name, environment)
 
     def initialize(self):
         pass

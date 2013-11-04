@@ -1,48 +1,37 @@
 from dckit import DCKit
-from dckit.drivers.crazyflie import Crazyflie
 from dckit.environment import Environment
-from dckit.task import Task
+from dckit.tasks.task import Task
+from dckit.tasks.movement_task import MovementTask
+from dckit.drivers.ideal import Ideal
 
-a2b = DCKit()
+from pprint import pprint
+
+dckit = DCKit()
 
 environment = Environment()
 
 # Growing Y is NORTH
-environment.setFrameOfReference(10, 10, 10)
-environment.setOrigin(5, 5, 0)
-environment.addOharger(5, 5, 0)
+environment.setFrameOfReference((10, 10, 10))
+environment.setOrigin((5, 5, 0))
+environment.addCharger((5, 5, 0))
 
 for i in range(4):
-    drone = Crazyflie("Drone " + str(i))
+    drone = Ideal("Drone " + str(i), environment)
     environment.addDrone(drone)
 
-task = Task("Record in a square")
+task = Task("Maintask")
 
-rectask = RecordingTask("Start Recording")
-task.add(rectask)
+subtask1 = MovementTask("subtask1", (1,1,1))
+subtask2 = MovementTask("subtask2", (2,2,2))
+subtask3 = MovementTask("subtask3", (3,3,3))
+task.addSubtask(subtask1)
+subtask2.addSubtask(subtask3)
+task.addSubtask(subtask2)
 
-movetask = MovementTask("Move to A", (0,1,1))
-task.add(moveTask)
+pprint(task)
 
+dckit.addTask(task)
 
-task.Start()
-
-foreach task in subtasks:
-task.run(drone)
-
-subtask = MovementTask("Move")
-# subtask.addDrone("Drone 1")
-# subtask.addDroneGroup(1)
-subtask.moveRelative(0, 0, 1)
-
-subtask = AVTask("Turn on video and bla")
-
-
-
-
-task.addSubtask(subtask)
-
-environment.setTask(task)
-
-a2b.setEnvironment(environment)
-a2b.start(timeout=2 * 60 * 60)
+# dckit.setEnvironment(environment)
+dckit._main_loop()
+# dckit

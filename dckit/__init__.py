@@ -1,5 +1,5 @@
 from dckit.environment import Environment
-from dckit.task import Task, TaskState
+from dckit.tasks.task import TaskState
 
 
 class DCKit(object):
@@ -8,7 +8,7 @@ class DCKit(object):
     """
 
     environment = None
-    tasks = None
+    tasks = []
     drones = []
 
     def __init__(self):
@@ -25,13 +25,9 @@ class DCKit(object):
     def _main_loop(self):
         while True:
             # self.environment
-
             for task in self.tasks:
                 task.evaluate()
+                if task.state == TaskState.COMPLETE:
+                    break
 
-
-class Enum(set):
-    def __getattr__(self, name):
-        if name in self:
-            return name
-        raise AttributeError
+        print("DONE")

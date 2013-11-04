@@ -1,4 +1,4 @@
-from dckit import Enum
+from dckit.enum import Enum
 
 
 class TaskState(Enum):
@@ -11,16 +11,26 @@ class Task(object):
     """Top level task class for defining "jobs" for the drones
     """
 
-    drone = None
-    subtasks = []
-    state = TaskState.READY
-    capabilities = []
-
-    def __init__(self):
+    def __init__(self, name="Task"):
         super(Task, self).__init__()
+
+        self.name = name
+        self.drone = None
+        self.subtasks = []
+        self.state = TaskState.READY
+        self.capabilities = []
 
     def start(self):
         self.state = TaskState.EXECUTING
+
+    def isComplete(self):
+        pass
+
+    def setCapabilities(self, capabilities):
+        self.capabilities = capabilities
+
+    def addSubtask(self, task):
+        self.subtasks.append(task)
 
     def evaluate(self):
         currentSubtask = self.getCurrentSubtask()
@@ -54,7 +64,7 @@ class Task(object):
         for subtask in self.subtasks:
             currentSubtask = subtask.getCurrentSubtask()
 
-            if currentSubtask is None:
+            if currentSubtask is None or currentSubtask == TaskState.COMPLETE:
                 continue
 
             ready = currentSubtask.state == TaskState.READY
@@ -65,8 +75,11 @@ class Task(object):
 
         return TaskState.COMPLETE
 
-    def isComplete(self):
-        pass
-
-    def setCapabilities(self, capabilities):
-        self.capabilities = capabilities
+    def __repr__(self):
+        ret = "<Task (" + str(id(self)) + "): \n" + \
+            "    Drone: " + str(self.drone) + " \n" + \
+            "    Subtasks: " + str(self.subtasks) + " \n" + \
+            "    State: " + str(self.state) + " \n" + \
+            "    Capabilities: " + str(self.capabilities) + "\n" + \
+            ">"
+        return ret
