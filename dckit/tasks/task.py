@@ -1,11 +1,4 @@
-from dckit.enum import Enum
-
-
-class TaskState(Enum):
-    READY = 0
-    EXECUTING = 1
-    COMPLETE = 2
-
+from dckit.tasks.task_state import TaskState
 
 class Task(object):
     """Top level task class for defining "jobs" for the drones

@@ -1,4 +1,5 @@
-from dckit.tasks.task import Task, TaskState
+from dckit.tasks.task import Task
+from dckit.tasks.task_state import TaskState
 
 
 class MovementTask(Task):

@@ -38,3 +38,6 @@ TSWLatexian*
 # Python
 *.pyc
 .idea
+DroneCharge/DroneCharge.sln
+DroneCharge/DroneCharge.v11.suo
+DroneCharge/DroneCharge/DroneCharge.pyproj

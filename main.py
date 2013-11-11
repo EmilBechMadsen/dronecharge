@@ -2,7 +2,12 @@ from dckit import DCKit
 from dckit.environment import Environment
 from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
+<<<<<<< HEAD
 from dckit.drivers.ideal import IdealDrone
+=======
+from dckit.drivers.ideal import Ideal
+from dckit.charger.charger_manager import ChargerManager
+>>>>>>> 4a9cef6001d0551e8dd4b8ca8822038f542575d5
 
 from pprint import pprint
 
@@ -13,12 +18,13 @@ environment = Environment()
 # Growing Y is NORTH
 environment.setFrameOfReference((10, 10, 10))
 environment.setOrigin((5, 5, 0))
-environment.addCharger((5, 5, 0))
 
 for i in range(4):
     drone = IdealDrone("Drone " + str(i), environment)
     environment.addDrone(drone)
 
+#Initialize Charger Manager
+chargerManager = ChargerManager()
 
 task = Task("Maintask")
 subtask1 = MovementTask("subtask1", (1,1,1))
