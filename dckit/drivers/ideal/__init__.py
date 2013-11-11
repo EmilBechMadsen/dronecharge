@@ -1,7 +1,7 @@
 from dckit.drone import Drone
 
 
-class Ideal(Drone):
+class IdealDrone(Drone):
     battery = 1
     diameter = 10.0
     actualHeading = 0.0
@@ -12,7 +12,7 @@ class Ideal(Drone):
 
     """docstring for Crazyflie"""
     def __init__(self, name, environment):
-        super(Ideal, self).__init__(name, environment)
+        super(IdealDrone, self).__init__(name, environment)
 
     def initialize(self):
         pass

@@ -10,11 +10,14 @@ class MovementTask(Task):
 
     def start(self):
         self.state = TaskState.EXECUTING
-
-        self.isCompleted = True
+        self.drone.move(targetPosition)
 
     def isComplete(self):
-        return self.isCompleted
+        print("actual: " + str(self.drone.actualPosition))
+        print("target: " + str(self.drone.targetPosition))
+        print(str(self.drone.actualPosition == self.drone.targetPosition))
+        if self.drone.actualPosition == self.drone.targetPosition:
+            self.isCompleted = True
 
     def __repr__(self):
         ret = "\n\t<MovementTask (" + self.name + ") "

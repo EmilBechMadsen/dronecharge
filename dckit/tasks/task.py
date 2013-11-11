@@ -26,6 +26,9 @@ class Task(object):
     def isComplete(self):
         pass
 
+    def setDrone(self, drone):
+        self.drone = drone
+
     def setCapabilities(self, capabilities):
         self.capabilities = capabilities
 
