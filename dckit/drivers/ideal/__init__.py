@@ -13,6 +13,9 @@ class IdealDrone(Drone):
     """docstring for Crazyflie"""
     def __init__(self, name, environment=None):
         super(IdealDrone, self).__init__(name, environment)
+        self.capabilities = [
+            "move"
+        ]
 
     def initialize(self):
         pass

@@ -6,6 +6,7 @@ from dckit.drivers.ideal import IdealDrone
 import logging
 
 
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
@@ -27,8 +28,14 @@ class TaskTest(unittest.TestCase):
         task.addSubtask(subtask1)
 
         self.dckit.addTask(task)
-        self.dckit._iterate(0)
 
+        self.assertEqual(len(task.required_capabilities), 0, "Task capability empty")
+        
+        self.dckit._accumulateCapabilities()
+        self.assertEqual(task.required_capabilities, set(['move']), "Task capability move")
+        self.assertEqual(task.required_capabilities, set(['move']), "Subtask capability move")
+
+        self.dckit._iterate(0)
         self.assertEqual(task.state, TaskState.EXECUTING, "Task Executing")
         self.assertEqual(subtask1.state, TaskState.EXECUTING, "Subtask Executing")
 
@@ -58,6 +65,9 @@ class TaskTest(unittest.TestCase):
         task.addSubtask(subtask2)
 
         self.dckit.addTask(task)
+
+        self.dckit._accumulateCapabilities()
+        self.assertEqual(task.required_capabilities, set(['move']), "Task capability move")
 
         self.assertEquals(task.state, TaskState.READY, "Task Ready")
         self.assertEquals(subtask1.state, TaskState.READY, "Subtask1 Ready")
@@ -129,6 +139,3 @@ class TaskTest(unittest.TestCase):
         self.assertEquals(subtask4.state, TaskState.COMPLETE, "Subtask4 COMPLETE")
         self.assertEquals(subtask5.state, TaskState.COMPLETE, "Subtask5 COMPLETE")
         self.assertEquals(subtask6.state, TaskState.COMPLETE, "Subtask6 COMPLETE")
-        
-if __name__ == "__main__":
-    unittest.main()

@@ -1,4 +1,9 @@
 from dckit.enum import Enum
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class TaskState(Enum):
@@ -18,7 +23,7 @@ class Task(object):
         self.drone = None
         self.subtasks = []
         self.state = TaskState.READY
-        self.capabilities = []
+        self.required_capabilities = []
         self.environment = environment
 
     def start(self):
@@ -31,10 +36,22 @@ class Task(object):
         self.drone = drone
 
     def setCapabilities(self, capabilities):
-        self.capabilities = capabilities
+        self.required_capabilities = capabilities
 
     def addSubtask(self, task):
         self.subtasks.append(task)
+
+    def accumulateCapabilities(self):
+        if len(self.subtasks) == 0:
+            return set(self.required_capabilities)
+
+        self.required_capabilities = set(self.required_capabilities)
+
+        for subtask in self.subtasks:
+            caps = subtask.accumulateCapabilities()
+            self.required_capabilities = self.required_capabilities.union(caps)
+
+        return self.required_capabilities
 
     def evaluate(self):
         currentSubtask = self.getCurrentSubtask()
@@ -50,12 +67,18 @@ class Task(object):
             return
 
         if currentSubtask.state == TaskState.READY:
-            self.state = TaskState.EXECUTING
-
             drone = self.drone
-            if drone is None: # TODO: or DRONE DOES NOT HAVE SUFFICIENT POWER
-                drone = self.environment.getDrone(self.capabilities)
+            logger.debug(drone)
+            # TODO: or DRONE DOES NOT HAVE SUFFICIENT POWER
+            if drone is None or drone.isBatteryLow():
+                drone = self.environment.getDrone(self.required_capabilities)
+                if drone is None: # IF IT'S STILL NONE, WE HAVE TO WAIT (BY TRYING AGAIN UNTILL ONE IS AVAILABLE)
+                    return
 
+                # insert the charging subtree for the current drone
+                # insert move command for the new drone
+
+            self.state = TaskState.EXECUTING
             currentSubtask.setDrone(drone)
             self.setDrone(drone)
 
@@ -76,20 +99,24 @@ class Task(object):
             currentSubtask = subtask.getCurrentSubtask()
             # No children, not complete yet
             if currentSubtask is None and subtask.state != TaskState.COMPLETE:
-                self.state = TaskState.EXECUTING # Must be about to execute.
+                # Must be about to execute.
+                self.state = TaskState.EXECUTING
                 return subtask
 
-            if (currentSubtask is None and subtask.state == TaskState.COMPLETE) or currentSubtask == TaskState.COMPLETE:
+            if subtask.state == TaskState.COMPLETE or \
+                    currentSubtask == TaskState.COMPLETE:
                 continue
 
             ready = currentSubtask.state == TaskState.READY
             executing = currentSubtask.state == TaskState.EXECUTING
 
             if ready or executing:
-                self.state = TaskState.EXECUTING # Must be about to execute.
+                # Must be about to execute.
+                self.state = TaskState.EXECUTING
                 return currentSubtask
 
-        self.state = TaskState.COMPLETE # Entire subtree complete means this is complete.
+        # Entire subtree complete means this is complete.
+        self.state = TaskState.COMPLETE
         return TaskState.COMPLETE
 
     def __repr__(self):
@@ -97,6 +124,6 @@ class Task(object):
             "    Drone: " + str(self.drone) + " \n" + \
             "    Subtasks: " + str(self.subtasks) + " \n" + \
             "    State: " + str(self.state) + " \n" + \
-            "    Capabilities: " + str(self.capabilities) + "\n" + \
+            "    Capabilities: " + str(self.required_capabilities) + "\n" + \
             ">"
         return ret

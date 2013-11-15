@@ -7,6 +7,9 @@ class MovementTask(Task):
 
         self.isCompleted = False
         self.targetPosition = targetPosition
+        self.required_capabilities = [
+            "move"
+        ]
 
     def start(self):
         self.state = TaskState.EXECUTING

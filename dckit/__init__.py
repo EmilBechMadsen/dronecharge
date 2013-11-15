@@ -25,6 +25,10 @@ class DCKit(object):
     def addTask(self, task):
         self.tasks.append(task)
 
+    def _accumulateCapabilities(self):
+        for task in self.tasks:
+            task.accumulateCapabilities()
+
     def _iterate(self, iteration):
         for task in self.tasks:
             if task.environment is None:
@@ -40,6 +44,8 @@ class DCKit(object):
             logger.debug(task)
 
     def _main_loop(self):
+        self._accumulateCapabilities()
+
         i = 0
         while True:
             # self.environment

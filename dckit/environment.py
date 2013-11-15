@@ -34,4 +34,8 @@ class Environment(object):
             drone.initialize()
 
     def getDrone(self, capabilities):
-        return self.drones[0]
+        capableDrones = [drone for drone in self.drones if drone.hasCapabilities(capabilities) and drone.isCharged]
+        if len(capableDrones) == 0:
+            return None
+        else:
+            return sorted(capableDrones, lambda x: len(x.capabilities))[0]
