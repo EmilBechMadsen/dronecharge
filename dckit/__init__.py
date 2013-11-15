@@ -1,4 +1,6 @@
 from dckit.environment import Environment
+from dckit.tasks.task import TaskState
+
 
 class DCKit(object):
     """Main class that encapsulates everything
