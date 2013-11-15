@@ -1,5 +1,10 @@
 from dckit.environment import Environment
 from dckit.tasks.task import TaskState
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class DCKit(object):
@@ -20,20 +25,24 @@ class DCKit(object):
     def addTask(self, task):
         self.tasks.append(task)
 
+    def _iterate(self, iteration):
+        for task in self.tasks:
+            if task.environment is None:
+                task.environment = self.environment
+
+            if task.state == TaskState.COMPLETE:
+                task.evaluate()
+                logger.info("DONE")
+                return False
+
+            task.evaluate()
+            logger.debug("\nIteration: " + str(iteration))
+            logger.debug(task)
+
     def _main_loop(self):
         i = 0
         while True:
             # self.environment
-            for task in self.tasks:
-                if task.environment is None:
-                    task.environment = self.environment
-
-                if task.state == TaskState.COMPLETE:
-                    task.evaluate()
-                    print("DONE")
-                    return
-                task.evaluate()
-                print("\nIteration: " + str(i))
-                print(task)
-
+            if not self._iterate(i):
+                return
             i += 1

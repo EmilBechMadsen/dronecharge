@@ -4,7 +4,6 @@ from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
 from dckit.drivers.ideal import IdealDrone
 
-from pprint import pprint
 
 dckit = DCKit()
 
