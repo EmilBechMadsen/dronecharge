@@ -7,17 +7,15 @@ class DCKit(object):
 
     """
 
-    environment = None
-    tasks = []
-    drones = []
-
     def __init__(self):
         super(DCKit, self).__init__()
 
         self.environment = Environment()
+        self.tasks = []
 
     def addDrone(self, drone):
-        self.drones.append(drone)
+        drone.environment = self.environment
+        self.environment.addDrone(drone)
 
     def addTask(self, task):
         self.tasks.append(task)
@@ -27,6 +25,9 @@ class DCKit(object):
         while True:
             # self.environment
             for task in self.tasks:
+                if task.environment is None:
+                    task.environment = self.environment
+
                 if task.state == TaskState.COMPLETE:
                     task.evaluate()
                     print("DONE")

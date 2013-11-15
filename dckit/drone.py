@@ -12,9 +12,10 @@ class Drone(object):
     target = None
     batterly_level = None
 
-    def __init__(self, name, environment):
+    def __init__(self, name, environment=None):
         super(Drone, self).__init__()
         self.name = name
+        self.environment = environment
 
     def initialize(self):
         self.starting_position = self.get_position()

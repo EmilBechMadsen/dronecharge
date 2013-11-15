@@ -2,6 +2,7 @@ import unittest
 from dckit import DCKit
 from dckit.tasks.task import Task, TaskState
 from dckit.tasks.movement_task import MovementTask
+from dckit.drivers.ideal import IdealDrone
 
 
 class TaskTest(unittest.TestCase):
@@ -12,6 +13,9 @@ class TaskTest(unittest.TestCase):
         pass
 
     def test_evaluate(self):
+        drone = IdealDrone("Drone 1")
+        self.dckit.addDrone(drone)
+
         task = Task("Maintask")
 
         subtask1 = MovementTask("subtask1", (1, 1, 1))

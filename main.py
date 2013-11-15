@@ -21,12 +21,12 @@ for i in range(4):
 
 
 task = Task("Maintask")
-subtask1 = MovementTask("subtask1", (1,1,1))
-subtask2 = MovementTask("subtask2", (2,2,2))
-subtask3 = MovementTask("subtask3", (3,3,3))
-subtask4 = MovementTask("subtask4", (3,3,3))
-subtask5 = MovementTask("subtask5", (3,3,3))
-subtask6 = MovementTask("subtask6", (3,3,3))
+subtask1 = MovementTask("subtask1", (1, 1, 1))
+subtask2 = MovementTask("subtask2", (2, 2, 2))
+subtask3 = MovementTask("subtask3", (3, 3, 3))
+subtask4 = MovementTask("subtask4", (3, 3, 3))
+subtask5 = MovementTask("subtask5", (3, 3, 3))
+subtask6 = MovementTask("subtask6", (3, 3, 3))
 
 # Probably need some way for each subtask to know which
 # parent-task it is under so we can reference it's drones and environment easily?

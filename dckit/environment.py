@@ -11,7 +11,6 @@ class Environment(object):
     origin = None
     chargers = []
     drones = []
-    task = None
 
     def __init__(self, arg=None):
         super(Environment, self).__init__()
@@ -29,12 +28,10 @@ class Environment(object):
     def addDrone(self, drone):
         self.drones.append(drone)
 
-    def setTask(self, task):
-        self.task = task
-
     def start(self, timeout=300):
         for drone in self.drones:
             drone.setEnvironment(self)
             drone.initialize()
 
-
+    def getDrone(self, capabilities):
+        return self.drones[0]

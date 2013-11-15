@@ -1,10 +1,17 @@
-from dckit.tasks.task_state import TaskState
+from dckit.enum import Enum
+
+
+class TaskState(Enum):
+    READY = 0
+    EXECUTING = 1
+    COMPLETE = 2
+
 
 class Task(object):
     """Top level task class for defining "jobs" for the drones
     """
 
-    def __init__(self, name="Task"):
+    def __init__(self, name="Task", environment=None):
         super(Task, self).__init__()
 
         self.name = name
@@ -12,6 +19,7 @@ class Task(object):
         self.subtasks = []
         self.state = TaskState.READY
         self.capabilities = []
+        self.environment = environment
 
     def start(self):
         self.state = TaskState.EXECUTING
@@ -36,13 +44,21 @@ class Task(object):
 
             return
 
-        # currentSubtask can be the state directly, remember?
+        # currentSubtask can be the state directly
         if currentSubtask == TaskState.COMPLETE:
             self.state = TaskState.COMPLETE
             return
 
         if currentSubtask.state == TaskState.READY:
             self.state = TaskState.EXECUTING
+
+            drone = self.drone
+            if drone is None: # TODO: or DRONE DOES NOT HAVE SUFFICIENT POWER
+                drone = self.environment.getDrone(self.capabilities)
+
+            currentSubtask.setDrone(drone)
+            self.setDrone(drone)
+
             currentSubtask.start()
         else:
             currentSubtask.evaluate()
