@@ -16,21 +16,22 @@ class DCKit(object):
         super(DCKit, self).__init__()
 
         self.environment = Environment()
-        self.tasks = []
 
     def addDrone(self, drone):
         drone.environment = self.environment
         self.environment.addDrone(drone)
 
     def addTask(self, task):
-        self.tasks.append(task)
+        self.environment.addTask(task)
 
     def _accumulateCapabilities(self):
-        for task in self.tasks:
+        tasks = self.environment.tasks
+        for task in tasks:
             task.accumulateCapabilities()
 
     def _iterate(self, iteration):
-        for task in self.tasks:
+        tasks = self.environment.tasks
+        for task in tasks:
             if task.environment is None:
                 task.environment = self.environment
 

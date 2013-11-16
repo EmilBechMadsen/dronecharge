@@ -25,6 +25,7 @@ class Task(object):
         self.state = TaskState.READY
         self.required_capabilities = []
         self.environment = environment
+        self.ignores_low_battery = False
 
     def start(self):
         self.state = TaskState.EXECUTING
@@ -33,6 +34,8 @@ class Task(object):
         pass
 
     def setDrone(self, drone):
+        for subTask in self.subtasks:
+            subTask.setDrone(drone)
         self.drone = drone
 
     def setCapabilities(self, capabilities):
@@ -58,7 +61,6 @@ class Task(object):
         if currentSubtask is None:
             if self.isComplete():
                 self.state = TaskState.COMPLETE
-
             return
 
         # currentSubtask can be the state directly
@@ -67,21 +69,18 @@ class Task(object):
             return
 
         if currentSubtask.state == TaskState.READY:
-            drone = self.drone
-            logger.debug(drone)
-            # TODO: or DRONE DOES NOT HAVE SUFFICIENT POWER
-            if drone is None or drone.isBatteryLow():
-                drone = self.environment.getDrone(self.required_capabilities)
-                if drone is None: # IF IT'S STILL NONE, WE HAVE TO WAIT (BY TRYING AGAIN UNTILL ONE IS AVAILABLE)
-                    return
+            if not self.ignores_low_battery:
+                drone = self.environment.replaceDroneIfNeeded(
+                    self.drone,
+                    self.required_capabilities
+                )
 
-                # insert the charging subtree for the current drone
-                # insert move command for the new drone
+            if drone is not None:
+                self.setDrone(drone)
+            else:
+                return
 
             self.state = TaskState.EXECUTING
-            currentSubtask.setDrone(drone)
-            self.setDrone(drone)
-
             currentSubtask.start()
         else:
             currentSubtask.evaluate()

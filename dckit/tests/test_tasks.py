@@ -14,6 +14,9 @@ class TaskTest(unittest.TestCase):
     def setUp(self):
         self.dckit = DCKit()
 
+        drone = IdealDrone("Drone 1")
+        self.dckit.addDrone(drone)
+
     def tearDown(self):
         pass
 
@@ -139,3 +142,7 @@ class TaskTest(unittest.TestCase):
         self.assertEquals(subtask4.state, TaskState.COMPLETE, "Subtask4 COMPLETE")
         self.assertEquals(subtask5.state, TaskState.COMPLETE, "Subtask5 COMPLETE")
         self.assertEquals(subtask6.state, TaskState.COMPLETE, "Subtask6 COMPLETE")
+
+
+if __name__ == "__main__":
+    unittest.main()

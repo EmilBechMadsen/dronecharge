@@ -1,20 +1,22 @@
+from dckit.tasks.task import Task
+from dckit.tasks.landing_task import LandingTask
+from dckit.tasks.movement_task import MovementTask
 
 
 class Environment(object):
     """
     """
-
-    # coordinatesystem
-    # location
-    #
-    frame_of_reference = None
-    origin = None
-    chargers = []
-    drones = []
-
-    def __init__(self, arg=None):
+    def __init__(self):
         super(Environment, self).__init__()
-        self.arg = arg
+        self.frame_of_reference = None
+        self.origin = None
+        self.chargers = []
+        self.drones = []
+        self.tasks = []
+
+    def addTask(self, task):
+        task.environment = self
+        self.tasks.append(task)
 
     def setFrameOfReference(self, frameOfReference):
         self.frame_of_reference = frameOfReference
@@ -26,6 +28,7 @@ class Environment(object):
         self.chargers.append(charger)
 
     def addDrone(self, drone):
+        drone.environment = self
         self.drones.append(drone)
 
     def start(self, timeout=300):
@@ -38,4 +41,30 @@ class Environment(object):
         if len(capableDrones) == 0:
             return None
         else:
-            return sorted(capableDrones, lambda x: len(x.capabilities))[0]
+            return sorted(capableDrones, key=lambda x: len(x.capabilities))[0]
+
+    def replaceDroneIfNeeded(self, drone, required_capabilities):
+        if drone is None:
+            # dequeue a new drone
+            drone = self.getDrone(required_capabilities)
+        elif drone.isBatteryLow():
+            # create new task tree for the empty drone (land and charge)
+            charge_task = Task("Charge")
+
+            move_task = MovementTask("Move above Charger", (10, 10, 1))
+            move_task.ignores_low_battery = True
+            charge_task.addSubtask(move_task)
+
+            land_task = LandingTask("Land on the Charger")
+            land_task.ignores_low_battery = True
+            charge_task.addSubtask(land_task)
+
+            charge_task.ignores_low_battery = True
+            charge_task.setDrone(drone)
+
+            self.addTask(charge_task)
+
+            drone = self.getDrone(required_capabilities)
+
+            #MOVE NEW DRONE TO START POS
+        return drone
