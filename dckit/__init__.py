@@ -37,7 +37,7 @@ class DCKit(object):
 
             if task.state == TaskState.COMPLETE:
                 task.evaluate()
-                logger.info("DONE")
+                # logger.info("DONE")
                 return False
 
             task.evaluate()

@@ -1,3 +1,6 @@
+import time
+
+
 class Drone(object):
     """Base class for drone drivers
 
@@ -34,7 +37,7 @@ class Drone(object):
         pass
 
     def isBatteryLow(self):
-        return self.low_battery_level * 2 >= self.battery_level
+        return self.low_battery_level * 2.0 >= self.battery_level
 
     def hasCapabilities(self, capabilities):
         required_capabilities = set(capabilities)

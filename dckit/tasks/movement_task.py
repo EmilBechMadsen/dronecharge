@@ -1,4 +1,5 @@
-from dckit.tasks.task import Task, TaskState
+from dckit.tasks.task import Task
+import time
 
 
 class MovementTask(Task):
@@ -12,12 +13,12 @@ class MovementTask(Task):
         ]
 
     def start(self):
-        self.state = TaskState.EXECUTING
+        time.sleep(0.01)
         self.drone.move(self.targetPosition)
-
-    def isComplete(self):
         if self.drone.actualPosition == self.drone.targetPosition:
             self.isCompleted = True
+
+    def isComplete(self):
         return self.isCompleted
 
     def __repr__(self):

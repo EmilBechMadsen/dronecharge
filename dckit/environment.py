@@ -37,7 +37,7 @@ class Environment(object):
             drone.initialize()
 
     def getDrone(self, capabilities):
-        capableDrones = [drone for drone in self.drones if drone.hasCapabilities(capabilities) and drone.isCharged]
+        capableDrones = [drone for drone in self.drones if drone.hasCapabilities(capabilities) and drone.isCharged()]
         if len(capableDrones) == 0:
             return None
         else:
@@ -55,7 +55,7 @@ class Environment(object):
             move_task.ignores_low_battery = True
             charge_task.addSubtask(move_task)
 
-            land_task = LandingTask("Land on the Charger")
+            land_task = LandingTask("Land on the Charger", (10, 10, 0))
             land_task.ignores_low_battery = True
             charge_task.addSubtask(land_task)
 

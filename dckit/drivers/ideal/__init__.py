@@ -2,17 +2,17 @@ from dckit.drone import Drone
 
 
 class IdealDrone(Drone):
-    battery = 1
-    diameter = 10.0
-    actualHeading = 0.0
-    targetHeading = 0.0
-
-    actualPosition = (0, 0, 0)
-    targetPosition = (0, 0, 0)
-
     """docstring for Crazyflie"""
     def __init__(self, name, environment=None):
         super(IdealDrone, self).__init__(name, environment)
+        self.battery_level = 1.0
+        self.diameter = 0.0
+        self.actualHeadin = 0.0
+        self.targetHeading = 0.0
+
+        self.actualPosition = (0, 0, 0)
+        self.targetPosition = (0, 0, 0)
+
         self.capabilities = [
             "move"
         ]
@@ -40,7 +40,7 @@ class IdealDrone(Drone):
 
     def getBatteryLevel(self):
         # return battery level normalized to 0.0 - 1.0
-        return self.battery
+        return self.battery_level
 
     def getPosition(self):
         # return drone's position in the environment's coordinate system
@@ -49,3 +49,6 @@ class IdealDrone(Drone):
     def getDroneDiameter(self):
         # return drone size in the environment's coordinate system
         return self.diameter
+
+    def isCharged(self):
+        return self.battery_level >  0.8

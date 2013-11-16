@@ -1,5 +1,7 @@
 from dckit.enum import Enum
+from threading import Thread
 import logging
+
 
 
 logging.basicConfig(level=logging.INFO)
@@ -78,10 +80,12 @@ class Task(object):
             if drone is not None:
                 self.setDrone(drone)
             else:
+                logger.info("No drone available to perform the task")
                 return
 
             self.state = TaskState.EXECUTING
-            currentSubtask.start()
+            currentSubtask.state = TaskState.EXECUTING
+            Thread(name=None, target=currentSubtask.start).start()
         else:
             currentSubtask.evaluate()
 
