@@ -1,21 +1,21 @@
+import time
+
+
 class Drone(object):
     """Base class for drone drivers
 
     """
 
-    capabilities = [""]
-
-    name = "Generic Drone"
-    environment = None
-    starting_position = None
-    position = None
-    target = None
-    batterly_level = None
-
     def __init__(self, name, environment=None):
         super(Drone, self).__init__()
         self.name = name
         self.environment = environment
+        self.starting_position = None
+        self.position = None
+        self.target = None
+        self.battery_level = 1.0
+        self.low_battery_level = 0.1
+        self.capabilities = []
 
     def initialize(self):
         self.starting_position = self.get_position()
@@ -36,10 +36,27 @@ class Drone(object):
     def moveRelative(self, position=None, x=None, y=None, z=None):
         pass
 
-    # Abstract functions
+    def isBatteryLow(self):
+        return self.low_battery_level * 2.0 >= self.battery_level
 
+    def hasCapabilities(self, capabilities):
+        required_capabilities = set(capabilities)
+        available_capabilities = set(self.capabilities)
+
+        return required_capabilities.issubset(available_capabilities)
+
+    def getState(self):
+        pass
+
+    def setState(self):
+        pass
+
+    # Abstract functions
     def getBatteryLevel(self):
         raise NotImplementedError("Please Implement this method")
 
     def getPosition(self):
         raise NotImplementedError("Please Implement this method")
+
+    def isCharged(self):
+        raise NotImplementedError("Please implement this method")
