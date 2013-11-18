@@ -1,4 +1,5 @@
-
+from dckit.charger.charger_manager import ChargerManager
+from dckit.drone_factory import DroneFactory
 
 class Environment(object):
     """
@@ -11,10 +12,16 @@ class Environment(object):
     origin = None
     chargers = []
     drones = []
+    
+    #Private variables
+    __chargerManager = None
+    __droneFactory = None
 
     def __init__(self, arg=None):
         super(Environment, self).__init__()
         self.arg = arg
+        self.__droneFactory = DroneFactory()
+        self.__chargerManager = ChargerManager(self.__droneFactory)
 
     def setFrameOfReference(self, frameOfReference):
         self.frame_of_reference = frameOfReference
@@ -26,12 +33,14 @@ class Environment(object):
         self.chargers.append(charger)
 
     def addDrone(self, drone):
-        self.drones.append(drone)
+        drone.setEnvironment(self)
+        drone.initialize()
+        self.__droneFactory.addDrone(drone)
 
-    def start(self, timeout=300):
-        for drone in self.drones:
-            drone.setEnvironment(self)
-            drone.initialize()
+    #def start(self, timeout=300):
+    #    for drone in self.drones:
+    #        drone.setEnvironment(self)
+    #        drone.initialize()
 
     def getDrone(self, capabilities):
-        return self.drones[0]
+        return self.__droneFactory.getDrone()

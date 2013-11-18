@@ -1,15 +1,18 @@
+from dckit.drone_factory import DroneFactory
 from dckit.charger.charger import Charger
+from dckit.common.event import Event
 
 class ChargerManager(object):
 
     #Private Variables
     __chargers = []
-
-    #Public Variables
+    __droneFactory = None
 
     #Initialize
-    def __init__(self):
+    def __init__(self, droneFactory):
         super(ChargerManager, self).__init__()
+        self.__droneFactory = droneFactory
+
         # Initialize chargers
         charger1 = Charger("TopLeftCharger")
         charger1.setCoordinates(0, 10)
@@ -26,6 +29,11 @@ class ChargerManager(object):
         charger4 = Charger("BottomLeftCharger")
         charger4.setCoordinates(0, 0)
         self.addCharger(charger4)
+
+        #Wire up event handers
+        for charger in self.__chargers:
+            #print charger
+            charger.DroneRecharged += self.__droneFactory.returnDroneToAvaliablePool
     
     #Private Methods
     def __validateChargerPosition(self, charger):
@@ -35,6 +43,7 @@ class ChargerManager(object):
     def addCharger(self, charger):
         if(self.__validateChargerPosition(charger)):
             self.__chargers.append(charger)
+            self.__ChargerAdded([charger])
 
     #TODO
     def removeCharger(self, x, y):
@@ -43,5 +52,13 @@ class ChargerManager(object):
     #TODO
     def findClosestCharger(self, drone):
         raise NotImplementedError("TODO - 'findClosestCharger' method is not implemented")
+
+    #Events
+    __ChargerAdded = Event("ChargerAdded")
+
+    #Event handlers
+    def onChargerAdded(sender, charger):
+        print 'Charger added to manager: %s' % charger.name
+
 
 

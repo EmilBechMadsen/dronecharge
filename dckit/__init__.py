@@ -1,6 +1,6 @@
 from dckit.environment import Environment
 from dckit.tasks.task import TaskState
-
+import sys
 
 class DCKit(object):
     """Main class that encapsulates everything
@@ -31,6 +31,7 @@ class DCKit(object):
                 if task.state == TaskState.COMPLETE:
                     task.evaluate()
                     print("DONE")
+                    ch = sys.stdin.read(1)
                     return
                 task.evaluate()
                 print("\nIteration: " + str(i))
