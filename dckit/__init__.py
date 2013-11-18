@@ -3,7 +3,6 @@ from dckit.tasks.task import TaskState
 import logging
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -24,6 +23,9 @@ class DCKit(object):
     def addTask(self, task):
         self.environment.addTask(task)
 
+    def run(self, visualize=False):
+        self._main_loop(visualize)
+
     def _accumulateCapabilities(self):
         tasks = self.environment.tasks
         for task in tasks:
@@ -31,25 +33,43 @@ class DCKit(object):
 
     def _iterate(self, iteration):
         tasks = self.environment.tasks
+        
         for task in tasks:
             if task.environment is None:
                 task.environment = self.environment
 
             if task.state == TaskState.COMPLETE:
                 task.evaluate()
-                # logger.info("DONE")
+                logger.info("DONE")
                 return False
 
             task.evaluate()
             logger.debug("\nIteration: " + str(iteration))
             logger.debug(task)
 
-    def _main_loop(self):
+        return True
+
+    def _main_loop(self, visualize=False):
+        if visualize:
+            logger.info("Running with visualizations")
+            from dckit.visualization.task_tree import TaskVisualizer
+
+            task_visualizer = TaskVisualizer(self.environment.tasks)
+
         self._accumulateCapabilities()
+
+        if visualize:
+            task_visualizer.visualize()
 
         i = 0
         while True:
+            logger.info("Iteration %s", i)
             # self.environment
             if not self._iterate(i):
+                logger.debug("Iterate finished last iteration")
                 return
+
+            if visualize:
+                task_visualizer.visualize()
+
             i += 1

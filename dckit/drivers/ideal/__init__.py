@@ -51,4 +51,4 @@ class IdealDrone(Drone):
         return self.diameter
 
     def isCharged(self):
-        return self.battery_level >  0.8
+        return self.battery_level > 0.8

@@ -1,6 +1,10 @@
 from dckit.tasks.task import Task
 from dckit.tasks.landing_task import LandingTask
 from dckit.tasks.movement_task import MovementTask
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class Environment(object):
@@ -37,7 +41,18 @@ class Environment(object):
             drone.initialize()
 
     def getDrone(self, capabilities):
-        capableDrones = [drone for drone in self.drones if drone.hasCapabilities(capabilities) and drone.isCharged()]
+        capableDrones = []
+        for drone in self.drones:
+            if not drone.hasCapabilities(capabilities):
+                caps = set(capabilities) - set(drone.capabilities)
+                logger.info("Rejecting drone based on capabilities %s", caps)
+                continue
+            if not drone.isCharged():
+                logger.info("Rejecting drone because it is not charged")
+                continue
+
+            capableDrones.append(drone)
+
         if len(capableDrones) == 0:
             return None
         else:

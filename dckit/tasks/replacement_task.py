@@ -22,6 +22,8 @@ class ReplacementTask(Task):
             logger.warn("ReplacementTask started with no drone assigned!")
             return
 
+        time.sleep(0.01)
+
         self.drone.move(self.targetPosition)
         if self.drone.actualPosition == self.drone.targetPosition:
             self.isCompleted = True

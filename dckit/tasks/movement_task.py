@@ -17,10 +17,11 @@ class MovementTask(Task):
         ]
 
     def start(self):
-        # time.sleep(0.01)
         if self.drone is None:
             logger.warn("MovementTask started with no drone assigned!")
             return
+
+        time.sleep(1.0)
 
         self.drone.move(self.targetPosition)
         if self.drone.actualPosition == self.drone.targetPosition:

@@ -1,30 +1,30 @@
 from dckit import DCKit
-from dckit.environment import Environment
 from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
 from dckit.drivers.ideal import IdealDrone
+import logging
 
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 dckit = DCKit()
 
-environment = Environment()
-
 # Growing Y is NORTH
-environment.setFrameOfReference((10, 10, 10))
-environment.setOrigin((5, 5, 0))
-environment.addCharger((5, 5, 0))
+# dckit.environment.setFrameOfReference((10, 10, 10))
+# dckit.environment.setOrigin((5, 5, 0))
+# dckit.environment.addCharger((5, 5, 0))
 
 for i in range(4):
-    drone = IdealDrone("Drone " + str(i), environment)
-    environment.addDrone(drone)
-
+    drone = IdealDrone("Drone " + str(i))
+    dckit.addDrone(drone)
 
 task = Task("Maintask")
 subtask1 = MovementTask("subtask1", (1, 1, 1))
-subtask2 = MovementTask("subtask2", (2, 2, 2))
-subtask3 = MovementTask("subtask3", (3, 3, 3))
+subtask2 = Task("subtask2", (2, 2, 2))
+subtask3 = Task("subtask3", (3, 3, 3))
 subtask4 = MovementTask("subtask4", (3, 3, 3))
-subtask5 = MovementTask("subtask5", (3, 3, 3))
+subtask5 = Task("subtask5", (3, 3, 3))
 subtask6 = MovementTask("subtask6", (3, 3, 3))
 
 # Probably need some way for each subtask to know which
@@ -44,10 +44,5 @@ subtask5.addSubtask(subtask6)
 task.addSubtask(subtask2)
 
 dckit.addTask(task)
-
-print("Before loop")
-print(task)
-
-# dckit.setEnvironment(environment)
-dckit._main_loop()
+dckit.run(True)
 # dckit

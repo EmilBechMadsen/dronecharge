@@ -7,7 +7,7 @@ from operator import eq
 import logging
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -25,10 +25,10 @@ class TaskTest(unittest.TestCase):
         task = Task("Maintask")
 
         subtask1 = MovementTask("subtask1", (1, 1, 1))
-        subtask2 = MovementTask("subtask2", (2, 2, 2))
-        subtask3 = MovementTask("subtask3", (3, 3, 3))
+        subtask2 = Task("subtask2", (2, 2, 2))
+        subtask3 = Task("subtask3", (3, 3, 3))
         subtask4 = MovementTask("subtask4", (3, 3, 3))
-        subtask5 = MovementTask("subtask5", (3, 3, 3))
+        subtask5 = Task("subtask5", (3, 3, 3))
         subtask6 = MovementTask("subtask6", (3, 3, 3))
 
         task.addSubtask(subtask1)

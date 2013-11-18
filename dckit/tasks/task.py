@@ -3,7 +3,6 @@ from threading import Thread
 import logging
 
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -48,6 +47,8 @@ class Task(object):
         self.subtasks.append(task)
 
     def accumulateCapabilities(self):
+        logger.debug("Accumulating subtask capabilities")
+
         if len(self.subtasks) == 0:
             return set(self.required_capabilities)
 
@@ -60,16 +61,20 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
+        logger.debug("Evaluating task: %s", self)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:
             if self.isComplete():
                 self.state = TaskState.COMPLETE
+                logger.debug("Task Complete %s", self)
+
             return
 
         # currentSubtask can be the state directly
         # when its entire subtree is complete
         if currentSubtask == TaskState.COMPLETE:
             self.state = TaskState.COMPLETE
+            logger.debug("Task Subtree Complete %s", self)
             return
 
         if currentSubtask.state == TaskState.READY:
@@ -80,7 +85,10 @@ class Task(object):
                 )
 
             if drone is None:
-                logger.info("No drone available to perform the task")
+                logger.info(
+                    "No drone available to perform the task. " +
+                    "Required capabilities: %s", self.required_capabilities
+                )
                 return
 
             if self.drone is not None and self.drone != drone:
@@ -101,7 +109,11 @@ class Task(object):
                     [replacement_task] + \
                     parent.subtasks[currentSubtaskIndex:]
 
+                logger.debug("Sent drone to charge %s", self.drone)
+
                 self.setDrone(drone)
+
+                logger.debug("New drone is %s", self.drone)
 
                 return
 
@@ -111,6 +123,7 @@ class Task(object):
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
             Thread(name=None, target=currentSubtask.start).start()
+            logger.debug("Started task %s", currentSubtask)
         else:
             currentSubtask.evaluate()
 
@@ -122,6 +135,13 @@ class Task(object):
         """
         if len(self.subtasks) == 0:
             return None
+
+        # Non-leaf tasks must be of type Task
+        if type(self).__name__ != Task.__name__:
+            logger.warning(
+                "Only leaf nodes are executed, %s is not a leaf node, will not be executed",
+                self.__class__.__name__
+            )
 
         for subtask in self.subtasks:
             currentSubtask = subtask.getCurrentSubtask()
