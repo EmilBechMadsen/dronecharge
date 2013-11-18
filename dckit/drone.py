@@ -45,6 +45,12 @@ class Drone(object):
 
         return required_capabilities.issubset(available_capabilities)
 
+    def getState(self):
+        pass
+
+    def setState(self):
+        pass
+
     # Abstract functions
     def getBatteryLevel(self):
         raise NotImplementedError("Please Implement this method")

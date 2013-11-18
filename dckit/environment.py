@@ -62,9 +62,8 @@ class Environment(object):
             charge_task.ignores_low_battery = True
             charge_task.setDrone(drone)
 
+            charge_task.setDrone(drone)
             self.addTask(charge_task)
 
             drone = self.getDrone(required_capabilities)
-
-            #MOVE NEW DRONE TO START POS
         return drone

@@ -6,10 +6,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class MovementTask(Task):
+class ReplacementTask(Task):
     def __init__(self, name, targetPosition):
-        super(MovementTask, self).__init__(name)
+        super(ReplacementTask, self).__init__(name)
 
+        self.originalState = {}
         self.isCompleted = False
         self.targetPosition = targetPosition
         self.required_capabilities = [
@@ -17,9 +18,8 @@ class MovementTask(Task):
         ]
 
     def start(self):
-        # time.sleep(0.01)
         if self.drone is None:
-            logger.warn("MovementTask started with no drone assigned!")
+            logger.warn("ReplacementTask started with no drone assigned!")
             return
 
         self.drone.move(self.targetPosition)
@@ -27,10 +27,13 @@ class MovementTask(Task):
             self.isCompleted = True
 
     def isComplete(self):
+        if self.isCompleted:
+            self.drone.setState(self.originalState)
+
         return self.isCompleted
 
     def __repr__(self):
-        ret = "\n\t<MovementTask (" + self.name + ") "
+        ret = "\n\t<ReplacementTask (" + self.name + ") "
         ret += " State: " + str(self.state)
         if len(self.subtasks):
             ret += "\n\t" + str(self.subtasks) + "\n\t"

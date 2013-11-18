@@ -3,7 +3,6 @@ from threading import Thread
 import logging
 
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -23,6 +22,7 @@ class Task(object):
 
         self.name = name
         self.drone = None
+        self.parent = None
         self.subtasks = []
         self.state = TaskState.READY
         self.required_capabilities = []
@@ -44,6 +44,7 @@ class Task(object):
         self.required_capabilities = capabilities
 
     def addSubtask(self, task):
+        task.parent = self
         self.subtasks.append(task)
 
     def accumulateCapabilities(self):
@@ -66,6 +67,7 @@ class Task(object):
             return
 
         # currentSubtask can be the state directly
+        # when its entire subtree is complete
         if currentSubtask == TaskState.COMPLETE:
             self.state = TaskState.COMPLETE
             return
@@ -77,11 +79,34 @@ class Task(object):
                     self.required_capabilities
                 )
 
-            if drone is not None:
-                self.setDrone(drone)
-            else:
+            if drone is None:
                 logger.info("No drone available to perform the task")
                 return
+
+            if self.drone is not None and self.drone != drone:
+                original_state = self.drone.getState()
+
+                from dckit.tasks.replacement_task import ReplacementTask
+
+                replacement_task = ReplacementTask()
+                replacement_task.originalState = original_state
+
+                replacement_task.setDrone(drone)
+
+                # Insert replacement taks before current subtask
+                parent = currentSubtask.parent
+                currentSubtaskIndex = parent.subtasks.index(currentSubtask)
+                parent.subtasks = \
+                    parent.subtasks[:currentSubtaskIndex] +\
+                    [replacement_task] + \
+                    parent.subtasks[currentSubtaskIndex:]
+
+                self.setDrone(drone)
+
+                return
+
+            self.setDrone(drone)
+            currentSubtask.setDrone(drone)
 
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
