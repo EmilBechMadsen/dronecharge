@@ -18,6 +18,8 @@
     <Compile Include="dckit\common\event.py" />
     <Compile Include="dckit\common\__init__.py" />
     <Compile Include="dckit\drone_factory.py" />
+    <Compile Include="dckit\tasks\movement_task.py" />
+    <Compile Include="dckit\tests\charger_manager.py" />
     <Compile Include="main.py" />
     <Compile Include="dckit\drone.py" />
     <Compile Include="dckit\enum.py" />
@@ -39,7 +41,6 @@
     <Compile Include="dckit\charger\charger_state.py" />
     <Compile Include="dckit\charger\__init__.py" />
     <Compile Include="dckit\drivers\__init__.py" />
-    <Compile Include="dckit\tasks\movement_task.py" />
     <Compile Include="dckit\tasks\task.py" />
     <Compile Include="dckit\tasks\task_state.py" />
     <Compile Include="dckit\tasks\__init__.py" />
