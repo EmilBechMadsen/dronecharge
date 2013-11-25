@@ -38,3 +38,9 @@ TSWLatexian*
 # Python
 *.pyc
 .idea
+
+# Visual Studio
+*.pyproj
+*.pyproj.user
+*.sln
+*.v11.suo
