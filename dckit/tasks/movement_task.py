@@ -11,7 +11,7 @@ class MovementTask(Task):
         super(MovementTask, self).__init__(name)
 
         self.isCompleted = False
-        self.targetPosition = targetPosition
+        self.target = targetPosition
         self.required_capabilities = [
             "move"
         ]
@@ -21,10 +21,9 @@ class MovementTask(Task):
             logger.warn("MovementTask started with no drone assigned!")
             return
 
-        time.sleep(1.0)
+        self.drone.move(self.target)
 
-        self.drone.move(self.targetPosition)
-        if self.drone.actualPosition == self.drone.targetPosition:
+        if self.drone.position == self.drone.position:
             self.isCompleted = True
 
     def isComplete(self):

@@ -11,8 +11,8 @@ class Drone(object):
         self.name = name
         self.environment = environment
         self.starting_position = None
-        self.position = None
-        self.target = None
+        self.position = (0, 0, 0)
+        self.target = (0, 0, 0)
         self.battery_level = 1.0
         self.low_battery_level = 0.1
         self.capabilities = []

@@ -1,6 +1,5 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import pygraphviz as pg
 
 
 class TaskVisualizer(object):
@@ -21,6 +20,7 @@ class TaskVisualizer(object):
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
         plt.ion()
+
         plt.show()
 
     def walk(self, task):
@@ -37,6 +37,7 @@ class TaskVisualizer(object):
             self.walk_update(subtask)
 
     def visualize(self):
+        #while True:
         self.walk_update(self.tasks[0])
 
         colormap = ['red', 'yellow', 'green']
@@ -47,6 +48,6 @@ class TaskVisualizer(object):
 
         nx.draw(self.graph, ax=self.ax, pos=pos, node_color=colors, labels=labels, node_size=2000)
         # nx.draw(self.graph)
-        self.fig.canvas.draw()
+        #self.fig.canvas.draw()
         plt.draw()
-        plt.pause(1)
+        #plt.pause(0.1)

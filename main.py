@@ -1,7 +1,7 @@
 from dckit import DCKit
 from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
-from dckit.drivers.ideal import IdealDrone
+from dckit.drivers.realistic import RealisticDrone
 import logging
 
 
@@ -15,17 +15,17 @@ dckit = DCKit()
 # dckit.environment.setOrigin((5, 5, 0))
 # dckit.environment.addCharger((5, 5, 0))
 
-for i in range(4):
-    drone = IdealDrone("Drone " + str(i))
+for i in range(1):
+    drone = RealisticDrone("Drone " + str(i))
     dckit.addDrone(drone)
 
 task = Task("Maintask")
-subtask1 = MovementTask("subtask1", (1, 1, 1))
-subtask2 = Task("subtask2", (2, 2, 2))
-subtask3 = Task("subtask3", (3, 3, 3))
-subtask4 = MovementTask("subtask4", (3, 3, 3))
-subtask5 = Task("subtask5", (3, 3, 3))
-subtask6 = MovementTask("subtask6", (3, 3, 3))
+subtask1 = MovementTask("subtask1", (100, 1, 1))
+subtask2 = Task("subtask2")
+subtask3 = Task("subtask3")
+subtask4 = MovementTask("subtask4", (100, 100, 3))
+subtask5 = Task("subtask5")
+subtask6 = MovementTask("subtask6", (-100, 50, 3))
 
 # Probably need some way for each subtask to know which
 # parent-task it is under so we can reference it's drones and environment easily?
