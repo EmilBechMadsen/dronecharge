@@ -1,34 +1,52 @@
-from dckit.tasks.task import Task
-from dckit.tasks.landing_task import LandingTask
+<<<<<<< HEAD
 from dckit.charger.charger_manager import ChargerManager
 from dckit.drone_factory import DroneFactory
+=======
+from dckit.tasks.task import Task
+from dckit.tasks.landing_task import LandingTask
 from dckit.tasks.movement_task import MovementTask
 import logging
 
 
 logger = logging.getLogger(__name__)
 
+>>>>>>> origin/master
 
 class Environment(object):
+    """
+    """
+<<<<<<< HEAD
+
+    # coordinatesystem
+    # location
+    #
+    frame_of_reference = None
+    origin = None
+    chargers = []
+    drones = []
+    
     #Private variables
     __chargerManager = None
     __droneFactory = None
 
-    """
-    """
+    def __init__(self, arg=None):
+        super(Environment, self).__init__()
+        self.arg = arg
+        self.__droneFactory = DroneFactory()
+        self.__chargerManager = ChargerManager(self.__droneFactory)
+=======
     def __init__(self):
         super(Environment, self).__init__()
         self.frame_of_reference = None
         self.origin = None
         self.chargers = []
-        self.__droneFactory = DroneFactory()
-        self.__chargerManager = ChargerManager(self.__droneFactory)
         self.drones = []
         self.tasks = []
 
     def addTask(self, task):
         task.environment = self
         self.tasks.append(task)
+>>>>>>> origin/master
 
     def setFrameOfReference(self, frameOfReference):
         self.frame_of_reference = frameOfReference
@@ -40,10 +58,14 @@ class Environment(object):
         self.chargers.append(charger)
 
     def addDrone(self, drone):
-        drone.environment = self
+<<<<<<< HEAD
         drone.setEnvironment(self)
         drone.initialize()
         self.__droneFactory.addDrone(drone)
+=======
+        drone.environment = self
+        self.drones.append(drone)
+>>>>>>> origin/master
 
     #def start(self, timeout=300):
     #    for drone in self.drones:
@@ -51,7 +73,10 @@ class Environment(object):
     #        drone.initialize()
 
     def getDrone(self, capabilities):
+<<<<<<< HEAD
         return self.__droneFactory.getDrone()
+=======
+        capableDrones = []
         for drone in self.drones:
             if not drone.hasCapabilities(capabilities):
                 caps = set(capabilities) - set(drone.capabilities)
@@ -92,3 +117,4 @@ class Environment(object):
 
             drone = self.getDrone(required_capabilities)
         return drone
+>>>>>>> origin/master
