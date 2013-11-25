@@ -45,6 +45,9 @@ class ChargerManager(object):
             self.__chargers.append(charger)
             self.__ChargerAdded([charger])
 
+    def sendDroneToCharger(self, drone):
+        self__chargers[0].chargeDrone(drone)
+
     #TODO
     def removeCharger(self, x, y):
         raise NotImplementedError("TODO - 'removeCharger' method is not implemented")

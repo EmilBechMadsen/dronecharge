@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{42968ec4-a904-4310-a6ed-5c4f79865b29}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>dckit\tests\test_drone.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -19,7 +19,11 @@
     <Compile Include="dckit\common\__init__.py" />
     <Compile Include="dckit\drone_factory.py" />
     <Compile Include="dckit\tasks\movement_task.py" />
+    <Compile Include="dckit\tests\test_charger.py" />
     <Compile Include="dckit\tests\charger_manager.py" />
+    <Compile Include="dckit\tests\test_drone.py" />
+    <Compile Include="dckit\tests\test_environment.py" />
+    <Compile Include="dckit\tests\test_tasks.py" />
     <Compile Include="main.py" />
     <Compile Include="dckit\drone.py" />
     <Compile Include="dckit\enum.py" />
@@ -44,7 +48,6 @@
     <Compile Include="dckit\tasks\task.py" />
     <Compile Include="dckit\tasks\task_state.py" />
     <Compile Include="dckit\tasks\__init__.py" />
-    <Compile Include="dckit\tests\tasks.py" />
     <Compile Include="dckit\tests\__init__.py" />
     <Compile Include="dckit\drivers\crazyflie\__init__.py" />
     <Compile Include="dckit\drivers\ideal\__init__.py" />

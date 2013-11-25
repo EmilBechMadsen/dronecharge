@@ -30,20 +30,23 @@ class Charger(object):
     def setCoordinates(self, x, y):
         self.coordinates = (x, y)
 
-    def getCoordinates():
+    def getCoordinates(self):
         return self.coordinates
 
-    def isAvaliable():
-        return __state == ChargerState.AVAILABLE
+    def getState(self):
+        return self.__state;
+
+    def isAvaliable(self):
+        return self.__state == ChargerState.AVAILABLE
 
     def chargeDrone(self, drone):
-        if(isAvaliable()):
+        if(self.isAvaliable()):
             __drone = drone
-            #self.DroneReservedCharger([drone])
+            self.DroneReservedCharger([drone])
             #t = threading.Timer(5.0, self.DroneLanaded.trigger, [drone])
             #t = threading.Timer(14 * 60.0, self.DroneLanaded.trigger, [drone])
 
-            self.DroneRecharged([drone])
+            #self.DroneRecharged([drone])
 
         else:
             raise Exception('Charger occupied', 'Charger is not allowed to recharge 2 drones simultaneously')
