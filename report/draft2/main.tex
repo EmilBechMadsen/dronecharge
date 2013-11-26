@@ -1,0 +1,74 @@
+\documentclass{ubicomp2013}
+\usepackage{times}
+\usepackage{url}
+\usepackage{graphics}
+\usepackage{color}
+\usepackage[pdftex]{hyperref}
+\usepackage{tikz}
+\usepackage{float}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;} 
+\hypersetup{%
+pdftitle={DroneCharge - A Python Framework for Automated Quadcopter Charging}, pdfauthor={Zoricak-Androsiuk-Madsen}, pdfkeywords={Drone, Swarm, automated charging, quadcopter, framework}, bookmarksnumbered, pdfstartview={FitH}, colorlinks,
+citecolor=black, filecolor=black, linkcolor=black, urlcolor=black,
+breaklinks=true, }
+
+\newcommand{\comment}[1]{}
+\definecolor{Orange}{rgb}{1,0.5,0}
+\newcommand{\todo}[1]{\textsf{\textbf{\textcolor{Orange}{[[#1]]}}}}
+
+%\pagenumbering{arabic}  % Arabic page numbers for submission.  Remove this line to eliminate page numbers for the camera ready copy
+
+\begin{document}
+% to make various LaTeX processors do the right thing with page size
+\special{papersize=8.5in,11in}
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+% use this command to override the default ACM copyright statement
+% (e.g. for preprints). Remove for camera ready copy.
+%\toappear{Submitted for review to UbiComp 2012.}
+
+
+
+\title{DroneCharge: A Python Framework for Automated Quadcopter Charging}
+\numberofauthors{3}
+\author{
+  \alignauthor Miroslav Zoricak\\
+    \affaddr{IT-University of Copenhagen}\\
+    \affaddr{}
+    \email{mzor@itu.dk}
+ \alignauthor Kamil Androsiuk\\
+    \affaddr{IT-University of Copenhagen}\\
+    \affaddr{}
+    \email{kami@itu.dk}
+ \alignauthor Emil Bech Madsen\\
+    \affaddr{IT-University of Copenhagen}\\
+    \affaddr{}
+    \email{aebm@itu.dk} 
+}
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract.tex}
+\end{abstract}
+
+\keywords{Drone, swarm, automated charging, quadcopter, framework}
+
+\input{sections/introduction.tex}
+\input{sections/relatedwork.tex}
+\input{sections/methodology.tex}
+\input{sections/solution.tex}
+\input{sections/results.tex}
+\input{sections/discussion.tex}
+\input{sections/conclusion.tex}
+\input{sections/acknowledgements.tex}
+\begin{thebibliography}{9}
+\input{sections/references.tex}
+\end{thebibliography}
+
+\bibliographystyle{abbrv}
+\bibliography{sample}
+
+\end{document}
