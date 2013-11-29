@@ -1,0 +1,58 @@
+\section{Related Work}
+B\"urkle et. al proposed the idea of a swarm of drones fulfilling a task rather than a single drone in their article \textit{Towards Autonomous Micro UAV Swarms}\,\cite{burkleetal}. They suggested a system for inter-drone cooperation to seamlessly orchestrate several drones with different types of sensors in an environment. They also utilized simulation to test their system. This system was far larger than the produced solution and encompassed several other aspects that we did not consider. It provided with the idea of simulating drone movement during development for a much more efficient development process.
+
+Sima Mitra presented an Autonomous Quadcopter Docking System\,\cite{simamitra} that allowed drones to return to a charging station using computer vision for locating the docking station. In it, she showed that autonomously returning to a charging station was fully possible without a fixed locationing system. Although our framework expects some kind of locationing system for the airborne drones, this was useful as it demonstrated the automated landing on a specified target as battery depletes. The inherent limits of the reliance on computer vision were, however, not desirable.
+
+Both Altug et al.\,\cite{altugetal} and Ducard et. al.\,\cite{ducardetal} demonstrated the use of visual feedback for positioning and autonomous control of a drone. This was useful for the practical part of this project in which a kinect was used to track drones in order to autonomously perform tasks.
+
+Also relevant is the work of The Intelligent Mechatronics Lab at Boston University, in which a conductive surface was used to charge a drone without human interaction\,\cite{bostonuni}. This is of paramount importance in terms of realizing this solution, as full automation would not be possible unless the drone could charge itself without human interference.
+
+Finally, as an alternative to drone swarms, where battery issues are solved by an abundancy of drones, Abidali et. al.\,\cite{solarcopter} offered an alternative through the use of solar power. In their report, they outlined the design of SolarCopter, the worlds first solar-powered quadcopter capable of sustained flight.
+
+B\"urkle et al. focused primarily on swarm usage and capabilities, but mentioned very little about how the actual replacement of the drones would work. We left the execution of a task as an extensible abstract concept, and specifically focused on providing automatic drone-swapping to implementers of these tasks while including implementation of basic tasks such as movement and landing.
+
+Ducard et. al. and Altug et. al. both showed that drone control through the use of a visual feedback system was possible, but the actual execution of tasks were highly specific and non-extensible for the common developer. We aimed at allowing developers using visual feedback for position and movement to easily be able to perform tasks.
+
+Sima Mitra focused on computer vision to return to a charging station. We noted that there are inherent problems in Computer Vision such as the need for an unobstructed view of the intended target, and argued that more absolute positioning schemes such as GPS or external tracking of a drone would be more suitable, especially for swarm-based task execution in which the system needs a complete view of the operating area to simoultaneously use several drones.
+
+While the work of Boston University indeed showed that conductive charging of aerial drones was possible, we primarily focused on getting a drone to the charging station, and left the addition of conductive charging as a means to further automate task execution efforts.
+
+The SolarCopter provided an alternative to the drone swarm, but adds complications in regards to drone size and weather requirements. One could imagine a mixture, however, in which a solar powered drone could charge conventional drones and act as a swarm staging area.
+
+Figure \ref{fig:features} highlights the features of the various solutions. While we did not attempt to achieve sustainable drones, we, to some degree, dealt with all other application areas that are addressed by the mentioned solutions.
+
+\begin{figure}[h]
+\begin{tabular*}{0.475\textwidth}{
+p{\dimexpr 0.27\linewidth-1\tabcolsep} |
+p{\dimexpr 0.10\linewidth-2\tabcolsep} 
+p{\dimexpr 0.10\linewidth-2\tabcolsep} 
+p{\dimexpr 0.10\linewidth-2\tabcolsep} 
+p{\dimexpr 0.10\linewidth-2\tabcolsep} 
+p{\dimexpr 0.10\linewidth-2\tabcolsep} 
+p{\dimexpr 0.12\linewidth-2\tabcolsep} 
+p{\dimexpr 0.12\linewidth-2\tabcolsep}}
+& B\"urk. & Mit. & Alt. & Duc. & Bost. & Abi. & DC\\
+\hline
+Visual control &  & \checkmark & \checkmark & \checkmark &  &  & \checkmark \\
+\hline
+Auto-landing & \checkmark  & \checkmark &  &  &  &  & \checkmark \\
+\hline
+Tasks & \checkmark  &  &  &  &  &  & \checkmark \\
+\hline
+Extensibility & \checkmark &  &  &  &  &  & \checkmark \\
+\hline
+Cooperation &  \checkmark &  & \checkmark & \checkmark &  &  & \checkmark \\
+\hline
+Simulation & \checkmark  &  &  &  &  &  &  \checkmark \\
+\hline
+Auto-charging &   & \checkmark &  &  & \checkmark & \checkmark & \checkmark \\
+\hline
+Sustainable &   &  &  &  &  & \checkmark &  \\
+\hline
+Autonomy & \checkmark  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
+\hline
+Low Resource & & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark
+\end{tabular*}
+\caption{Feature comparison}
+\label{fig:features}
+\end{figure}

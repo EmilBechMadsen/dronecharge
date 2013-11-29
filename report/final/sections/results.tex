@@ -1,0 +1,21 @@
+\section{Evaluation}
+\todo{Here we'll iterate over the design of the framework through the experiences gained in the sample usage, as well as note the knowledge gained from the questionnaires posted on online drone-forums. We'll look at what we did but leave discussion of what could have been done differently/better to the discussion section.}
+\subsection{Developer survey}
+To gauge whether this would be useful for real-world developers, we posted a survey along with a description of the system on several of the largest drone-development internet forums. Although only a limited amount of developers replied, five in total, we felt comfortable that the level of interest was adequate. 
+
+When asked if the proposed framwork seemed useful, three developers replied that they either agreed or strongly agreed, one replied neutrally and one developer disagreed. When asked whether they had ever faced implementation issues that this framework would solve, three developers were neutral while one developer agreed and another strongly agreed. Finally, when asked if they would be interested in using such a framework, three developers agreed, one developer strongly agreed and only a single developer disagreed.
+
+One developer also noted that our suggested way of positining the drone was inadequate, as drift would influence its absolute position. This caused us to reconsider our positioning and movement methods.
+
+All in all, we believe it is safe to say that the interest in automatic charging of drones is present, although  responses may have been skewed by the possibility that only interested developers replied to the survey.
+
+\subsection{The experiment / Usage example}
+\subsubsection{Intial Experiments - The Crazyflie}
+In the initial stages of this project, we experimented with developing drivers for the Crazyflie Nano Quadcopter, using the Microsoft Kinect for locationing. These efforts provided us with valuable knowledge on the current state of art in regards to drone capabilities. Specifically, while the Crazyflie in and of itself was a suitable drone for freestyle flying, its rather limited control mechanisms and lack of hovering function severely impeded its use for the DroneCharge framework. It was very difficult if not impossible to make it land close enough to a charger for any real use, and task execution was unsafe at best. On a more positive note, it also gave us confidence that our driver-oriented architecture was correct, and helped us define the granularity of the interface between the framework and the drone by giving us some experience with operating drones programatically. Combined with the feedback from the developer in the conducted survey, we changed our approach to drone-positioning and control.
+
+\subsubsection{Simulated approach - Wizard of Oz}
+Due to time constraints, it was decided that we would not pursue a second type of drone, even though an AR Drone became available at a later stage. Instead, we focused on developing the framework and relying more on simulation and visualization for validation. We created visualization tools to illustrate the task tree as a coloured graph, and created usage scenario in which a Microsoft Kinect tracked a drone. Rather than the drone moving itself, a Wizard of Oz approach was used in which a human actor purposefully moved the drone in the pattern indicated by the framework in order to perform the task. This was done using the video-feed from the Kinect and adding overlays with markings for the drone and the target position.
+
+\todo{Image of Kinect overlay}
+
+This approach allowed us to verify that framework would act as intended provided that the drivers being used were implement as per specification.  While it was not as definitive proof as a real-life application, it provided us with enough verification to evaluate the framework.
