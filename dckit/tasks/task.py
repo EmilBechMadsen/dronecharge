@@ -101,7 +101,9 @@ class Task(object):
 
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
-            Thread(name=None, target=currentSubtask.start).start()
+            thread = Thread(name=None, target=currentSubtask.start)
+            thread.daemon = True
+            thread.start()
             #logger.debug("Started task %s", currentSubtask)
         else:
             currentSubtask.evaluate()

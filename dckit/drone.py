@@ -58,7 +58,9 @@ class Drone(object):
         pass
 
     def startControlLoop(self):
-        self.thread = Thread(group=None, target=self.controlLoop).start()
+        self.thread = Thread(group=None, target=self.controlLoop)
+        self.thread.daemon = True
+        self.thread.start()
 
     def controlLoop(self):
         logger.error("Control Loop not implemented!")
