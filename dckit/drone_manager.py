@@ -27,8 +27,9 @@ class DroneManager(object):
             __logger.warning("No avaliable drones in pool!")
     
     def getDrone(self, capabilities):
-        refreshDroneToAvaliablePool()
-        for drone in self.drones:
+        self.refreshAvaliableDronesPool()
+        capableDrones = []
+        for drone in self.__avaliableDronesPool:
             if not drone.hasCapabilities(capabilities):
                 caps = set(capabilities) - set(drone.capabilities)
                 logger.info("Rejecting drone based on capabilities %s", caps)

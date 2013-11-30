@@ -112,12 +112,13 @@ class Task(object):
         charge_task = Task("Charge")
 
         # First move above charger
-        move_task = MovementTask("Move above Charger", (oldDrone.charger[0], oldDrone.charger[1], oldDrone.position[2]))
+        oldDroneChargerPos = oldDrone.charger.getCoordinates()
+        move_task = MovementTask("Move above Charger", (oldDroneChargerPos[0], oldDroneChargerPos[1], oldDrone.position[2]))
         move_task.ignores_low_battery = True
         charge_task.addSubtask(move_task)
 
         # Then land.
-        land_task = LandingTask("Land on the Charger", (oldDrone.charger[0], oldDrone.charger[1], oldDrone.charger[2]))
+        land_task = LandingTask("Land on the Charger", (oldDroneChargerPos[0], oldDroneChargerPos[1], oldDroneChargerPos[2]))
         land_task.ignores_low_battery = True
         charge_task.addSubtask(land_task)
 
