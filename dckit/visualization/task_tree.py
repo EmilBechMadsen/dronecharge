@@ -31,6 +31,11 @@ class TaskVisualizer(object):
             self.walk(subtask)
 
     def walk_update(self, task):
+        if not id(task) in self.graph.node:
+            label = "{}: {}".format(task.name, task.__class__.__name__)
+            self.graph.add_node(id(task), state=task.state, label=label)
+            self.graph.add_edge(id(task.parent), id(task))
+
         self.graph.node[id(task)]['state'] = task.state
 
         for subtask in task.subtasks:

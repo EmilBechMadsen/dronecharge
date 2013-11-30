@@ -22,7 +22,7 @@ class PositionVisualizer(object):
 
         cv2.startWindowThread()
         cv2.namedWindow(self.win)
-        cv2.moveWindow(self.win, 0, 0)
+        cv2.moveWindow(self.win, 800, 0)
         cv2.resizeWindow(self.win, 500, 500)
 
     def visualize(self):
