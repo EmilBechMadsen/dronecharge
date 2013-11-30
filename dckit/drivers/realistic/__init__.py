@@ -25,6 +25,10 @@ class RealisticDrone(Drone):
     def initialize(self):
         pass
 
+    def isBatteryLow(self): ## DRAINS 0.8 OF BATTERY PER TASK (Intended to run out fast for testing)
+        self.battery_level = self.battery_level - 0.5 if ((self.battery_level - 0.5) >= 0.0) else self.low_battery_level * 2.0
+        return self.low_battery_level * 2.0 >= self.battery_level
+
     def move(self, position):
         self.target = position
         self.original_position = self.position

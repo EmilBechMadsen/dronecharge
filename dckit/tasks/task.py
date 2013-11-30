@@ -27,6 +27,7 @@ class Task(object):
         self.required_capabilities = []
         self.environment = environment
         self.ignores_low_battery = False
+        self.replacement_position = None
 
     def start(self):
         self.state = TaskState.EXECUTING
@@ -84,20 +85,25 @@ class Task(object):
                     self.required_capabilities
                 )
 
-            if replacementDrone is None:
-                logger.info(
-                    "No drone available to perform the task. " +
-                    "Required capabilities: %s", self.required_capabilities
-                )
-                return
+                if replacementDrone is None:
+                    logger.info(
+                        "No drone available to perform the task. " +
+                        "Required capabilities: %s", self.required_capabilities
+                    )
+                    if self.drone is not None:
+                        self.original_state = self.drone.getState() # Save state
+                        self.replacement_position = self.drone.position
+                        self.returnDroneToCharger(self.drone) # Return exhaused drone to charger.
+                        self.setDrone(None)
+                    return
 
-            if self.drone is not None and self.drone != replacementDrone:
-                self.switchDrones(self.drone, replacementDrone)
+                if self.drone is not None and self.drone != replacementDrone:
+                    self.replacement_position = self.drone.position
+                    self.switchDrones(self.drone, replacementDrone, currentSubtask)
+                    return
 
-                return
-
-            self.setDrone(replacementDrone)
-            currentSubtask.setDrone(replacementDrone)
+                self.setDrone(replacementDrone)
+                currentSubtask.setDrone(replacementDrone)
 
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
@@ -108,11 +114,10 @@ class Task(object):
         else:
             currentSubtask.evaluate()
 
-    def switchDrones(self, oldDrone, newDrone):
-        from dckit.tasks.replacement_task import ReplacementTask
+    def returnDroneToCharger(self, oldDrone):
         from dckit.tasks.movement_task import MovementTask
         from dckit.tasks.landing_task import LandingTask
-        # First, move the old drone to its charger by inserting a ReplacementTask into the task list.
+
         charge_task = Task("Charge")
 
         # First move above charger
@@ -129,22 +134,28 @@ class Task(object):
         charge_task.ignores_low_battery = True
         charge_task.setDrone(oldDrone)
 
-        charge_task.setDrone(oldDrone)
         self.environment.addTask(charge_task)
 
         logger.debug("Sent drone to charge %s", oldDrone)
 
+    def switchDrones(self, oldDrone, newDrone, currentSubtask):
+        from dckit.tasks.replacement_task import ReplacementTask
+        from dckit.tasks.movement_task import MovementTask
+        # First, move the old drone to its charger by inserting a ReplacementTask into the task list.
+        if oldDrone is not None:
+            self.returnDroneToCharger(oldDrone)
+
         # Second, move the new Drone into position and set the state.
-        original_state = oldDrone.getState()
 
-        replacement_task = ReplacementTask()
-        replacement_task.originalState = original_state
-
+        replacement_task = ReplacementTask("ReplacementTask", self.replacement_position)
+        #replacement_task.originalState = drone.original_state
         replacement_task.setDrone(newDrone)
-
+        
         # Insert replacement taks before current subtask
-        parent = self.currentSubtask.parent
-        currentSubtaskIndex = parent.subtasks.index(self.currentSubtask)
+        parent = currentSubtask.parent
+        replacement_task.parent = currentSubtask.parent
+
+        currentSubtaskIndex = parent.subtasks.index(currentSubtask)
         parent.subtasks = \
             parent.subtasks[:currentSubtaskIndex] +\
             [replacement_task] + \
@@ -152,9 +163,6 @@ class Task(object):
 
         self.setDrone(newDrone)
         logger.debug("New drone is %s", newDrone)
-
-
-
 
     def getCurrentSubtask(self):
         """

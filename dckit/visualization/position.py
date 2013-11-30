@@ -54,7 +54,6 @@ class PositionVisualizer(object):
             )
 
             cv2.rectangle(img, charger_top_left, charger_bottom_right, colors[i], 1)
-
             position = (
                 int(drone.position[0] + size / 2),
                 int(drone.position[1] + size / 2)

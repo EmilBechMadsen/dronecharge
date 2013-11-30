@@ -1,6 +1,8 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+import logging
 
+logger = logging.getLogger(__name__)
 
 class TaskVisualizer(object):
     """docstring for TaskVisualizer"""
@@ -24,7 +26,8 @@ class TaskVisualizer(object):
         plt.show()
 
     def walk(self, task):
-        label = "{}: {}".format(task.name, task.__class__.__name__)
+        #label = "{}: {}".format(task.name, task.__class__.__name__)
+        label = "{}".format(task.name)
         self.graph.add_node(id(task), state=task.state, label=label)
         for subtask in task.subtasks:
             self.graph.add_edge(id(task), id(subtask))
@@ -32,9 +35,11 @@ class TaskVisualizer(object):
 
     def walk_update(self, task):
         if not id(task) in self.graph.node:
-            label = "{}: {}".format(task.name, task.__class__.__name__)
+            #label = "{}: {}".format(task.name, task.__class__.__name__)
+            label = "{}".format(task.name)
             self.graph.add_node(id(task), state=task.state, label=label)
             self.graph.add_edge(id(task.parent), id(task))
+            self.init
 
         self.graph.node[id(task)]['state'] = task.state
 

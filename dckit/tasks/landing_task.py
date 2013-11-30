@@ -16,7 +16,7 @@ class LandingTask(Task):
         self.drone.move(self.targetPosition)
 
     def isComplete(self):
-        if self.drone.actualPosition == self.drone.targetPosition:
+        if self.drone.position == self.drone.target:
             self.isCompleted = True
         return self.isCompleted
 

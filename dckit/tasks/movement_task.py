@@ -26,7 +26,7 @@ class MovementTask(Task):
         self.drone.move(self.target)
 
         while True:
-            if np.allclose(self.drone.position, self.drone.target):
+            if np.allclose(self.drone.position, self.target):
                 self.isCompleted = True
                 logger.debug("Stopped Movement Task")
                 break

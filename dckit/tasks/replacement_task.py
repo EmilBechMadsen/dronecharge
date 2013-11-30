@@ -1,6 +1,7 @@
 from dckit.tasks.task import Task
 import time
 import logging
+import numpy as np
 
 
 logger = logging.getLogger(__name__)
@@ -23,9 +24,8 @@ class ReplacementTask(Task):
             return
 
         #time.sleep(0.01)
-
         self.drone.move(self.targetPosition)
-        if self.drone.actualPosition == self.drone.targetPosition:
+        if np.allclose(self.drone.position, self.targetPosition):
             self.isCompleted = True
 
     def isComplete(self):

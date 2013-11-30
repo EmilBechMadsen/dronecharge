@@ -20,7 +20,7 @@ charger1 = Charger("TopLeftCharger")
 charger1.setCoordinates(-200, -200, 0)
 
 charger2 = Charger("TopRightCharger")
-charger2.setCoordinates(10, 10, 0)
+charger2.setCoordinates(-200, -180, 0)
 
 charger3 = Charger("BottomRightCharger")
 charger3.setCoordinates(10, 0, 0)
@@ -30,7 +30,13 @@ charger4.setCoordinates(0, 0, 0)
 
 drone = RealisticDrone("Drone 1")
 drone.charger = charger1
+#drone.position = charger1.getCoordinates()
 dckit.addDrone(drone)
+
+drone2 = RealisticDrone("Drone 2")
+drone2.charger = charger2
+drone2.position = charger2.getCoordinates()
+dckit.addDrone(drone2)
 
 task = Task("Maintask")
 subtask1 = MovementTask("subtask1", (100, 1, 1))
@@ -42,12 +48,6 @@ subtask6 = MovementTask("subtask6", (-100, 50, 3))
 
 # Probably need some way for each subtask to know which
 # parent-task it is under so we can reference it's drones and environment easily?
-subtask1.setDrone(drone)
-subtask2.setDrone(drone)
-subtask3.setDrone(drone)
-subtask4.setDrone(drone)
-subtask5.setDrone(drone)
-subtask6.setDrone(drone)
 
 task.addSubtask(subtask1)
 subtask2.addSubtask(subtask3)

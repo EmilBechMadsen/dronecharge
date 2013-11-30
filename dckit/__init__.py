@@ -61,6 +61,7 @@ class DCKit(object):
 
             task_visualizer = TaskVisualizer(self.environment.tasks)
             position_visualizer = PositionVisualizer(self.environment.getAllDrones())
+            logger.info(self.environment.getAllDrones())
 
         self._accumulateCapabilities()
 
