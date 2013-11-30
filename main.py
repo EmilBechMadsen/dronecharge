@@ -2,8 +2,8 @@ from dckit import DCKit
 from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
 from dckit.drivers.realistic import RealisticDrone
+from dckit.charger.charger import Charger
 import logging
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -15,9 +15,22 @@ dckit = DCKit()
 # dckit.environment.setOrigin((5, 5, 0))
 # dckit.environment.addCharger((5, 5, 0))
 
-for i in range(1):
-    drone = RealisticDrone("Drone " + str(i))
-    dckit.addDrone(drone)
+ # Initialize chargers
+charger1 = Charger("TopLeftCharger")
+charger1.setCoordinates(0, 10, 0)
+
+charger2 = Charger("TopRightCharger")
+charger2.setCoordinates(10, 10, 0)
+
+charger3 = Charger("BottomRightCharger")
+charger3.setCoordinates(10, 0, 0)
+
+charger4 = Charger("BottomLeftCharger")
+charger4.setCoordinates(0, 0, 0)
+
+drone = RealisticDrone("Drone 1")
+drone.charger = charger1
+dckit.addDrone(drone)
 
 task = Task("Maintask")
 subtask1 = MovementTask("subtask1", (100, 1, 1))
