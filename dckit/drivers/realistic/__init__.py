@@ -9,6 +9,7 @@ class RealisticDrone(Drone):
         self.battery_level = 1.0
         self.diameter = 0.0
 
+        self.original_position = (0, 0, 0)
         self.position = (0, 0, 0)
         self.target = (0, 0, 0)
 
@@ -21,22 +22,7 @@ class RealisticDrone(Drone):
 
     def move(self, position):
         self.target = position
-
-        progress = 0.0
-        original_position = self.position
-
-        while progress < 1.0:
-            self.position = (
-                progress * self.target[0] + (1.0 - progress) * original_position[0],
-                progress * self.target[1] + (1.0 - progress) * original_position[1],
-                progress * self.target[2] + (1.0 - progress) * original_position[2]
-            )
-
-            time.sleep(0.5)
-            progress += 0.05
-            progress = min(progress, 1.0)
-
-        self.position = self.target
+        self.original_position = self.position
 
     def noop(self):
         # hover in place
@@ -56,3 +42,17 @@ class RealisticDrone(Drone):
 
     def isCharged(self):
         return self.battery_level > 0.8
+
+    def controlLoop(self):
+        while True:
+            original = self.original_position
+            position = self.position
+            target = self.target
+
+            diff = target - original
+
+            if position != target:
+                position += (diff / 100)
+                self.position = position
+
+            time.sleep(0.5)

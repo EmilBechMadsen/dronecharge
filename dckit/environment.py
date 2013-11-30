@@ -40,9 +40,9 @@ class Environment(object):
         self.chargers.append(charger)
 
     def addDrone(self, drone):
-        drone.environment = self
         drone.setEnvironment(self)
         drone.initialize()
+        drone.startControlLoop()
         self.__droneFactory.addDrone(drone)
 
     #def start(self, timeout=300):
