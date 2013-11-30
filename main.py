@@ -17,7 +17,7 @@ dckit = DCKit()
 
  # Initialize chargers
 charger1 = Charger("TopLeftCharger")
-charger1.setCoordinates(0, 10, 0)
+charger1.setCoordinates(-200, -200, 0)
 
 charger2 = Charger("TopRightCharger")
 charger2.setCoordinates(10, 10, 0)

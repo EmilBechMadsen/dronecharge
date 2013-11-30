@@ -28,6 +28,7 @@ class PositionVisualizer(object):
     def visualize(self):
         size = 500
         drone_size = 3
+        charger_size = 6
         img = np.zeros((size, size, 3), dtype=np.uint8)
 
         #while True:
@@ -42,6 +43,18 @@ class PositionVisualizer(object):
         ]
 
         for i, drone in enumerate(self.drones):
+            charger_top_left = (
+                int(drone.charger.coordinates[0] - charger_size / 2 + size / 2),
+                int(drone.charger.coordinates[1] - charger_size / 2 + size / 2)
+            )
+
+            charger_bottom_right = (
+                int(drone.charger.coordinates[0] + charger_size / 2 + size / 2),
+                int(drone.charger.coordinates[1] + charger_size / 2 + size / 2)
+            )
+
+            cv2.rectangle(img, charger_top_left, charger_bottom_right, colors[i], 1)
+
             position = (
                 int(drone.position[0] + size / 2),
                 int(drone.position[1] + size / 2)
