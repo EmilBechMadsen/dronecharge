@@ -79,46 +79,25 @@ class Task(object):
 
         if currentSubtask.state == TaskState.READY:
             if not self.ignores_low_battery:
-                drone = self.environment.replaceDroneIfNeeded(
+                replacementDrone = self.environment.replaceDroneIfNeeded(
                     self.drone,
                     self.required_capabilities
                 )
 
-            if drone is None:
+            if replacementDrone is None:
                 logger.info(
                     "No drone available to perform the task. " +
                     "Required capabilities: %s", self.required_capabilities
                 )
                 return
 
-            if self.drone is not None and self.drone != drone:
-                original_state = self.drone.getState()
-
-                from dckit.tasks.replacement_task import ReplacementTask
-
-                replacement_task = ReplacementTask()
-                replacement_task.originalState = original_state
-
-                replacement_task.setDrone(drone)
-
-                # Insert replacement taks before current subtask
-                parent = currentSubtask.parent
-                currentSubtaskIndex = parent.subtasks.index(currentSubtask)
-                parent.subtasks = \
-                    parent.subtasks[:currentSubtaskIndex] +\
-                    [replacement_task] + \
-                    parent.subtasks[currentSubtaskIndex:]
-
-                logger.debug("Sent drone to charge %s", self.drone)
-
-                self.setDrone(drone)
-
-                logger.debug("New drone is %s", self.drone)
+            if self.drone is not None and self.drone != replacementDrone:
+                switchDrones(self.drone, replacementDrone)
 
                 return
 
-            self.setDrone(drone)
-            currentSubtask.setDrone(drone)
+            self.setDrone(replacementDrone)
+            currentSubtask.setDrone(replacementDrone)
 
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
@@ -126,6 +105,51 @@ class Task(object):
             logger.debug("Started task %s", currentSubtask)
         else:
             currentSubtask.evaluate()
+
+    def switchDrones(self, oldDrone, newDrone):
+        from dckit.tasks.replacement_task import ReplacementTask
+        # First, move the old drone to its charger by inserting a ReplacementTask into the task list.
+        charge_task = Task("Charge")
+
+        # First move above charger
+        move_task = MovementTask("Move above Charger", (oldDrone.charger[0], oldDrone.charger[1], oldDrone.position[2]))
+        move_task.ignores_low_battery = True
+        charge_task.addSubtask(move_task)
+
+        # Then land.
+        land_task = LandingTask("Land on the Charger", (oldDrone.charger[0], oldDrone.charger[1], oldDrone.charger[2]))
+        land_task.ignores_low_battery = True
+        charge_task.addSubtask(land_task)
+
+        charge_task.ignores_low_battery = True
+        charge_task.setDrone(oldDrone)
+
+        charge_task.setDrone(oldDrone)
+        self.environment.addTask(charge_task)
+
+        logger.debug("Sent drone to charge %s", oldDrone)
+
+        # Second, move the new Drone into position and set the state.
+        original_state = oldDrone.getState()
+
+        replacement_task = ReplacementTask()
+        replacement_task.originalState = original_state
+
+        replacement_task.setDrone(newDrone)
+
+        # Insert replacement taks before current subtask
+        parent = currentSubtask.parent
+        currentSubtaskIndex = parent.subtasks.index(currentSubtask)
+        parent.subtasks = \
+            parent.subtasks[:currentSubtaskIndex] +\
+            [replacement_task] + \
+            parent.subtasks[currentSubtaskIndex:]
+
+        self.setDrone(newDrone)
+        logger.debug("New drone is %s", newDrone)
+
+
+
 
     def getCurrentSubtask(self):
         """

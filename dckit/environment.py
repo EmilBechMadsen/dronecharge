@@ -69,26 +69,7 @@ class Environment(object):
             return sorted(capableDrones, key=lambda x: len(x.capabilities))[0]
 
     def replaceDroneIfNeeded(self, drone, required_capabilities):
-        if drone is None:
+        if drone is None or drone.isBatteryLow():
             # dequeue a new drone
-            drone = self.getDrone(required_capabilities)
-        elif drone.isBatteryLow():
-            # create new task tree for the empty drone (land and charge)
-            charge_task = Task("Charge")
-
-            move_task = MovementTask("Move above Charger", (10, 10, 1))
-            move_task.ignores_low_battery = True
-            charge_task.addSubtask(move_task)
-
-            land_task = LandingTask("Land on the Charger", (10, 10, 0))
-            land_task.ignores_low_battery = True
-            charge_task.addSubtask(land_task)
-
-            charge_task.ignores_low_battery = True
-            charge_task.setDrone(drone)
-
-            charge_task.setDrone(drone)
-            self.addTask(charge_task)
-
             drone = self.getDrone(required_capabilities)
         return drone
