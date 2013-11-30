@@ -32,9 +32,9 @@ class Environment(object):
         self.origin = origin
 
     def addDrone(self, drone):
-        drone.environment = self
         drone.setEnvironment(self)
         drone.initialize()
+        drone.startControlLoop()
         self.__droneManager.addDrone(drone)
 
     #def start(self, timeout=300):

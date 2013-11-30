@@ -1,3 +1,4 @@
+from threading import Thread
 import time
 
 
@@ -50,6 +51,12 @@ class Drone(object):
         pass
 
     def setState(self):
+        pass
+
+    def startControlLoop(self):
+        self.thread = Thread(group=None, target=self.controlLoop)
+
+    def controlLoop(self):
         pass
 
     # Abstract functions
