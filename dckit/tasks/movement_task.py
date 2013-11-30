@@ -23,8 +23,12 @@ class MovementTask(Task):
 
         self.drone.move(self.target)
 
-        if self.drone.position == self.drone.position:
-            self.isCompleted = True
+        while True:
+            if self.drone.position == self.drone.position:
+                self.isCompleted = True
+                break
+
+            time.sleep(0.1)
 
     def isComplete(self):
         return self.isCompleted
