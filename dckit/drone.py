@@ -15,7 +15,10 @@ class Drone(object):
         super(Drone, self).__init__()
         self.name = name
         self.environment = environment
-        self.starting_position = None
+        self.bounding_radius = 10.0
+        self.no_fly_radius = 50.0
+        self.starting_position = None  # refers to start position at the beginning
+        self.original_position = (0, 0, 0)  # refers to start of the movement
         self.position = (0, 0, 0)
         self.target = (0, 0, 0)
         self.battery_level = 1.0
@@ -31,6 +34,7 @@ class Drone(object):
         self.environment = environment
 
     def move(self, position, x=None, y=None, z=None):
+        self.original_position = self.position
         if len(position) == 3:
             self.target = position
         elif x is not None and y is not None and z is not None:

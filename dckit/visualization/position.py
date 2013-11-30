@@ -27,27 +27,44 @@ class PositionVisualizer(object):
 
     def visualize(self):
         size = 500
-        drone_size = 5
+        drone_size = 3
         img = np.zeros((size, size, 3), dtype=np.uint8)
 
         #while True:
         img[:, :, :] = 0
 
         colors = [
-            (255, 0, 0),
-            (0, 255, 0),
             (0, 0, 255),
+            (0, 255, 0),
+            (255, 0, 0),
             (255, 255, 0),
             (255, 0, 255)
         ]
 
         for i, drone in enumerate(self.drones):
             position = (
-                int(drone.position[0] - drone_size / 2 + size / 2),
-                int(drone.position[1] - drone_size / 2 + size / 2)
+                int(drone.position[0] + size / 2),
+                int(drone.position[1] + size / 2)
             )
 
+            # drone's path
+            beginning = (
+                int(drone.original_position[0] + size / 2),
+                int(drone.original_position[1] + size / 2)
+            )
+
+            end = (
+                int(drone.target[0] + size / 2),
+                int(drone.target[1] + size / 2)
+            )
+            cv2.line(img, beginning, end, (100, 100, 100), 1)
+
+            # bounding box
+            cv2.circle(img, position, int(drone.bounding_radius), (100, 100, 100), 1)
+
+            # drone
             cv2.circle(img, position, drone_size, colors[i], -1)
+
             #logger.info("Position: %s", position)
 
         cv2.imshow(self.win, img)
