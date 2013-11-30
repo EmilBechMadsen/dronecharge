@@ -17,6 +17,7 @@ class Drone(object):
         self.battery_level = 1.0
         self.low_battery_level = 0.1
         self.capabilities = []
+        self.charger = None
 
     def initialize(self):
         self.starting_position = self.get_position()

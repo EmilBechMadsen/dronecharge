@@ -5,7 +5,7 @@ import threading
 class Charger(object):
 
     #Private Variables
-    __coordinates = (0 , 0)
+    __coordinates = (0 , 0, 0)
     __state = ChargerState.AVAILABLE
     __drone = None
 
@@ -27,8 +27,8 @@ class Charger(object):
         self.starting_position = self.get_position()
         self.position = self.starting_position
 
-    def setCoordinates(self, x, y):
-        self.coordinates = (x, y)
+    def setCoordinates(self, x, y, z):
+        self.coordinates = (x, y, z)
 
     def getCoordinates(self):
         return self.coordinates
