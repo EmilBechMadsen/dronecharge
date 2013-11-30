@@ -1,6 +1,7 @@
 from dckit.tasks.task import Task
 import time
 import logging
+import numpy as np
 
 
 logger = logging.getLogger(__name__)
@@ -21,14 +22,16 @@ class MovementTask(Task):
             logger.warn("MovementTask started with no drone assigned!")
             return
 
+        logger.debug("Started Movement Task")
         self.drone.move(self.target)
 
         while True:
-            if self.drone.position == self.drone.position:
+            if np.allclose(self.drone.position, self.drone.target):
                 self.isCompleted = True
+                logger.debug("Stopped Movement Task")
                 break
 
-            time.sleep(0.1)
+            time.sleep(0.05)
 
     def isComplete(self):
         return self.isCompleted

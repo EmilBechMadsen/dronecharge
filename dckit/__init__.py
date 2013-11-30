@@ -49,7 +49,7 @@ class DCKit(object):
             task.evaluate()
 
             logger.debug("\nIteration: " + str(iteration))
-            logger.debug(task)
+            #logger.debug(task)
 
         return True
 
@@ -60,7 +60,7 @@ class DCKit(object):
             from dckit.visualization.position import PositionVisualizer
 
             task_visualizer = TaskVisualizer(self.environment.tasks)
-            position_visualizer = PositionVisualizer(self.environment.drones)
+            position_visualizer = PositionVisualizer(self.environment.getAllDrones())
 
         self._accumulateCapabilities()
 

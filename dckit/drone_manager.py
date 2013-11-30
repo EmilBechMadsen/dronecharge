@@ -41,7 +41,10 @@ class DroneManager(object):
             return None
         else:
             return sorted(capableDrones, key=lambda x: len(x.capabilities))[0]
-    
+
+    def getAllDrones(self):
+        return self.__avaliableDronesPool + self.__occupiedDronesPool
+
     def refreshAvaliableDronesPool(self):
         for drone in self.__occupiedDronesPool:
             if drone.getBatteryLevel() >= 0.95:

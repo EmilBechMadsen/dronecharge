@@ -48,7 +48,7 @@ class PositionVisualizer(object):
             )
 
             cv2.circle(img, position, drone_size, colors[i], -1)
-            logger.info("Position: %s", position)
+            #logger.info("Position: %s", position)
 
         cv2.imshow(self.win, img)
         cv2.waitKey(1)

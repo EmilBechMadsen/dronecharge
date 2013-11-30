@@ -61,12 +61,12 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
-        logger.debug("Evaluating task: %s", self)
+        logger.debug("Evaluating task: %s", self.__class__)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:
             if self.isComplete():
                 self.state = TaskState.COMPLETE
-                logger.debug("Task Complete %s", self)
+                logger.debug("Task Complete")
 
             return
 
@@ -74,7 +74,7 @@ class Task(object):
         # when its entire subtree is complete
         if currentSubtask == TaskState.COMPLETE:
             self.state = TaskState.COMPLETE
-            logger.debug("Task Subtree Complete %s", self)
+            logger.debug("Task Subtree Complete")
             return
 
         if currentSubtask.state == TaskState.READY:
@@ -92,7 +92,7 @@ class Task(object):
                 return
 
             if self.drone is not None and self.drone != replacementDrone:
-                switchDrones(self.drone, replacementDrone)
+                self.switchDrones(self.drone, replacementDrone)
 
                 return
 
@@ -102,12 +102,14 @@ class Task(object):
             self.state = TaskState.EXECUTING
             currentSubtask.state = TaskState.EXECUTING
             Thread(name=None, target=currentSubtask.start).start()
-            logger.debug("Started task %s", currentSubtask)
+            #logger.debug("Started task %s", currentSubtask)
         else:
             currentSubtask.evaluate()
 
     def switchDrones(self, oldDrone, newDrone):
         from dckit.tasks.replacement_task import ReplacementTask
+        from dckit.tasks.movement_task import MovementTask
+        from dckit.tasks.landing_task import LandingTask
         # First, move the old drone to its charger by inserting a ReplacementTask into the task list.
         charge_task = Task("Charge")
 
@@ -139,8 +141,8 @@ class Task(object):
         replacement_task.setDrone(newDrone)
 
         # Insert replacement taks before current subtask
-        parent = currentSubtask.parent
-        currentSubtaskIndex = parent.subtasks.index(currentSubtask)
+        parent = self.currentSubtask.parent
+        currentSubtaskIndex = parent.subtasks.index(self.currentSubtask)
         parent.subtasks = \
             parent.subtasks[:currentSubtaskIndex] +\
             [replacement_task] + \

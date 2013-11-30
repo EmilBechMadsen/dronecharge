@@ -1,5 +1,9 @@
 from threading import Thread
 import time
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class Drone(object):
@@ -54,9 +58,10 @@ class Drone(object):
         pass
 
     def startControlLoop(self):
-        self.thread = Thread(group=None, target=self.controlLoop)
+        self.thread = Thread(group=None, target=self.controlLoop).start()
 
     def controlLoop(self):
+        logger.error("Control Loop not implemented!")
         pass
 
     # Abstract functions

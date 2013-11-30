@@ -47,3 +47,6 @@ class Environment(object):
             # dequeue a new drone
             drone = self.__droneManager.getDrone(required_capabilities)
         return drone
+
+    def getAllDrones(self):
+        return self.__droneManager.getAllDrones()
