@@ -64,8 +64,6 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
-        if self.drone is not None:
-            logger.info("CURRENT DRONE STATE: %s", self.drone.state)
         logger.debug("Evaluating task: %s", self.__class__)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:

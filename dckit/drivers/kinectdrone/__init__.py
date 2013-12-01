@@ -59,6 +59,9 @@ class KinectDrone(Drone):
     def isCharged(self):
         return self.battery_level > 0.8
 
+    def setState(self, state):
+        pass
+
     def controlLoop(self):
         while True:
             if self.loop_should_stop:
@@ -67,13 +70,16 @@ class KinectDrone(Drone):
             img, _ = freenect.sync_get_video()
 
             center = self.droneCenterFromImage(img)
+
             center = (
                 int(center[0] - img.shape[1] / 2),
                 int(center[1] - img.shape[0] / 2),
                 1
             )
 
-            logger.info("Position: %s", center)
+            del img
+
+            logger.debug("Position: %s", center)
 
             self.position = center
 

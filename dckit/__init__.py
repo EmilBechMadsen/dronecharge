@@ -71,7 +71,7 @@ class DCKit(object):
         self._accumulateCapabilities()
 
         if visualize:
-            thread = Thread(group=None, target=task_visualizer.visualize)
+            thread = Thread(group=None, target=task_visualizer.visualize, name=None)
             thread.daemon = True
             thread.start()
 
@@ -80,6 +80,7 @@ class DCKit(object):
             logger.info("Iteration %s", i)
             # self.environment
 
+            start = time.time()
             result = self._iterate(i)
 
 
@@ -87,11 +88,15 @@ class DCKit(object):
                 logger.debug("Iterate finished last iteration")
                 self.environment.stopAllDrones()
                 if visualize:
+                    logger.info("Stopping visualizer")
                     task_visualizer.stop()
                 break
 
             if visualize:
                 #task_visualizer.visualize()
                 position_visualizer.visualize()
+
+            duration = time.time() - start
+            logger.info("Iteration duration: %s", duration)
 
             i += 1

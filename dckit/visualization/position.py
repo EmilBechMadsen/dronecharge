@@ -71,8 +71,8 @@ class PositionVisualizer(object):
 
             # drone's path
             beginning = (
-                int(drone.original_position[0] + size[0] / 2),
-                int(drone.original_position[1] + size[1] / 2)
+                int(drone.position[0] + size[0] / 2),
+                int(drone.position[1] + size[1] / 2)
             )
 
             end = (
@@ -91,4 +91,5 @@ class PositionVisualizer(object):
 
         cv2.imshow(self.win, img)
         cv2.waitKey(1)
+        del img
 
