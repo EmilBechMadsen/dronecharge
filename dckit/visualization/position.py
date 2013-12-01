@@ -3,6 +3,7 @@ import numpy as np
 import time
 import logging
 import random
+import freenect
 
 
 logger = logging.getLogger(__name__)
@@ -19,6 +20,12 @@ class PositionVisualizer(object):
 
     def init(self):
         self.win = "Position"
+        self.have_kinect = False
+        self.img = None
+
+        video = freenect.sync_get_video()
+        if video is not None:
+            self.have_kinect = True
 
         cv2.startWindowThread()
         cv2.namedWindow(self.win)
@@ -26,13 +33,18 @@ class PositionVisualizer(object):
         cv2.resizeWindow(self.win, 500, 500)
 
     def visualize(self):
-        size = 500
+        size = (640, 480)
         drone_size = 3
         charger_size = 6
-        img = np.zeros((size, size, 3), dtype=np.uint8)
 
-        #while True:
-        img[:, :, :] = 0
+        if self.have_kinect:
+            img, _ = freenect.sync_get_video()
+            img = cv2.cvtColor(img, cv2.cv.CV_BGR2RGB)
+        else:
+            if self.img is None:
+                self.img = np.zeros((size[1], size[0], 3))
+            img = self.img
+            img[:, :, :] = 0
 
         colors = [
             (0, 0, 255),
@@ -44,30 +56,30 @@ class PositionVisualizer(object):
 
         for i, drone in enumerate(self.drones):
             charger_top_left = (
-                int(drone.charger.coordinates[0] - charger_size / 2 + size / 2),
-                int(drone.charger.coordinates[1] - charger_size / 2 + size / 2)
+                int(drone.charger.coordinates[0] - charger_size / 2 + size[0] / 2),
+                int(drone.charger.coordinates[1] - charger_size / 2 + size[1] / 2)
             )
 
             charger_bottom_right = (
-                int(drone.charger.coordinates[0] + charger_size / 2 + size / 2),
-                int(drone.charger.coordinates[1] + charger_size / 2 + size / 2)
+                int(drone.charger.coordinates[0] + charger_size / 2 + size[0] / 2),
+                int(drone.charger.coordinates[1] + charger_size / 2 + size[1] / 2)
             )
 
             cv2.rectangle(img, charger_top_left, charger_bottom_right, colors[i], 1)
             position = (
-                int(drone.position[0] + size / 2),
-                int(drone.position[1] + size / 2)
+                int(drone.position[0] + size[0] / 2),
+                int(drone.position[1] + size[1] / 2)
             )
 
             # drone's path
             beginning = (
-                int(drone.original_position[0] + size / 2),
-                int(drone.original_position[1] + size / 2)
+                int(drone.original_position[0] + size[0] / 2),
+                int(drone.original_position[1] + size[1] / 2)
             )
 
             end = (
-                int(drone.target[0] + size / 2),
-                int(drone.target[1] + size / 2)
+                int(drone.target[0] + size[0] / 2),
+                int(drone.target[1] + size[1] / 2)
             )
             cv2.line(img, beginning, end, (100, 100, 100), 1)
 
