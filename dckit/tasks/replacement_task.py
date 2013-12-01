@@ -25,12 +25,10 @@ class ReplacementTask(Task):
 
         #time.sleep(0.01)
         self.drone.move(self.targetPosition)
-        if np.allclose(self.drone.position, self.targetPosition):
-            self.isCompleted = True
 
     def isComplete(self):
-        if self.isCompleted:
-            self.drone.setState(self.originalState)
+        if self.drone.isAtTarget(self.targetPosition):
+            self.isCompleted = True
 
         return self.isCompleted
 

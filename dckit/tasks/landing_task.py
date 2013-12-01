@@ -1,5 +1,7 @@
 from dckit.tasks.task import Task, TaskState
-
+import numpy as np
+import logging
+logger = logging.getLogger(__name__)
 
 class LandingTask(Task):
     def __init__(self, name, targetPosition):
@@ -16,8 +18,9 @@ class LandingTask(Task):
         self.drone.move(self.targetPosition)
 
     def isComplete(self):
-        if self.drone.position == self.drone.target:
+        if self.drone.isAtTarget(self.targetPosition, 1):
             self.isCompleted = True
+            logger.info("LANDING TASK COMPLETE")
         return self.isCompleted
 
     def __repr__(self):

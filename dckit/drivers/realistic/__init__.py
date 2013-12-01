@@ -12,11 +12,10 @@ class RealisticDrone(Drone):
     def __init__(self, name, environment=None):
         super(RealisticDrone, self).__init__(name, environment)
         self.battery_level = 1.0
-        self.diameter = 0.0
-
         self.original_position = np.array([0, 0, 0])
         self.position = np.array([0, 0, 0])
         self.target = np.array([0, 0, 0])
+        self.low_battery_level = 0.2
 
         self.capabilities = [
             "move"
@@ -25,8 +24,9 @@ class RealisticDrone(Drone):
     def initialize(self):
         pass
 
-    def isBatteryLow(self): ## DRAINS 0.8 OF BATTERY PER TASK (Intended to run out fast for testing)
-        self.battery_level = self.battery_level - 0.5 if ((self.battery_level - 0.5) >= 0.0) else self.low_battery_level * 2.0
+    def isBatteryLow(self): ## DRAINS 0.5 OF BATTERY PER TASK (Intended to run out fast for testing)
+        self.battery_level = self.battery_level - 0.2 if ((self.battery_level - 0.2) >= 0.0) else self.low_battery_level * 2.0
+        logger.info(self.battery_level)
         return self.low_battery_level * 2.0 >= self.battery_level
 
     def move(self, position):
@@ -45,10 +45,6 @@ class RealisticDrone(Drone):
         # return drone's position in the environment's coordinate system
         return self.position
 
-    def getDroneDiameter(self):
-        # return drone size in the environment's coordinate system
-        return self.diameter
-
     def isCharged(self):
         return self.battery_level > 0.8
 
@@ -60,7 +56,7 @@ class RealisticDrone(Drone):
 
             diff = target - original
 
-            if not np.allclose(position, target):
+            if not self.isAtTarget(target, 1):
                 position += (diff / 100.0)
                 self.position = tuple(position)
 

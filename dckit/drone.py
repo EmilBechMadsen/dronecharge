@@ -61,6 +61,13 @@ class Drone(object):
     def setState(self):
         pass
 
+    def isAtTarget(self, target=None, error_margin=None):
+        if target is None:
+            target = self.target
+        if error_margin is None:
+            error_margin = self.bounding_radius
+        return abs(self.position[0] - target[0]) <= error_margin and  abs(self.position[1] - target[1]) <= error_margin and abs(self.position[2] - target[2]) <= error_margin
+
     def startControlLoop(self):
         self.thread = Thread(group=None, target=self.controlLoop)
         self.thread.daemon = True
