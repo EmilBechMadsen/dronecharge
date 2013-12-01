@@ -28,6 +28,7 @@ class Task(object):
         self.environment = environment
         self.ignores_low_battery = False
         self.replacement_position = None
+        self.repeat_mode = False
 
     def start(self):
         self.state = TaskState.EXECUTING
@@ -62,7 +63,7 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
-        logger.info("Evaluating task: %s", self.__class__)
+        logger.debug("Evaluating task: %s", self.__class__)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:
             if self.isComplete():
@@ -76,6 +77,11 @@ class Task(object):
         if currentSubtask == TaskState.COMPLETE:
             self.state = TaskState.COMPLETE
             logger.debug("Task Subtree Complete")
+            if self.parent is None: # If task is Root
+                if self.repeat_mode: # If task is set to repeat, reset 
+                    self.environment.resetTaskTree(self)
+                else: # else delete
+                    self.environment.deleteTaskTree(self)
             return
 
         if currentSubtask.state == TaskState.READY:
@@ -110,7 +116,6 @@ class Task(object):
             thread = Thread(name=None, target=currentSubtask.start)
             thread.daemon = True
             thread.start()
-            #logger.debug("Started task %s", currentSubtask)
         else:
             currentSubtask.evaluate()
 
@@ -204,6 +209,12 @@ class Task(object):
         self.state = TaskState.COMPLETE
         return TaskState.COMPLETE
 
+
+    def getTaskRoot(self):
+        if self.parent is None:
+            return self
+        return self.parent.getTaskRoot()
+
     def __repr__(self):
         ret = "<Task (" + str(id(self)) + "): \n" + \
             "    Drone: " + str(self.drone) + " \n" + \
@@ -212,3 +223,4 @@ class Task(object):
             "    Capabilities: " + str(self.required_capabilities) + "\n" + \
             ">"
         return ret
+

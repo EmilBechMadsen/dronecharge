@@ -26,8 +26,7 @@ class TaskVisualizer(object):
         plt.show()
 
     def walk(self, task):
-        #label = "{}: {}".format(task.name, task.__class__.__name__)
-        label = "{}".format(id(task))
+        label = "{}".format(task.name)
         self.graph.add_node(id(task), state=task.state, label=label)
         for subtask in task.subtasks:
             self.graph.add_edge(id(task), id(subtask))
@@ -45,7 +44,8 @@ class TaskVisualizer(object):
 
     def visualize(self):
         #while True:
-        self.walk_update(self.tasks[0])
+        if len(self.tasks) > 0:
+            self.walk_update(self.tasks[0])
 
         colormap = ['red', 'yellow', 'green']
 
