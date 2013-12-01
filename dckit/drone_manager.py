@@ -28,7 +28,7 @@ class DroneManager(object):
         for drone in self.__avaliableDronesPool:
             if not drone.hasCapabilities(capabilities):
                 caps = set(capabilities) - set(drone.capabilities)
-                __logger.info("Rejecting drone based on capabilities %s", caps)
+                logger.info("Rejecting drone based on capabilities %s", caps)
                 continue
 
             capableDrones.append(drone)

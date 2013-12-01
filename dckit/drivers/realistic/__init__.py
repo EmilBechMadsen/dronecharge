@@ -18,15 +18,18 @@ class RealisticDrone(Drone):
         self.low_battery_level = 0.2
 
         self.capabilities = [
-            "move"
+            "move",
+            "videorecord"
         ]
+
+        self.state["recordingVideo"] = False
 
     def initialize(self):
         pass
 
     def isBatteryLow(self): ## DRAINS 0.5 OF BATTERY PER TASK (Intended to run out fast for testing)
         self.battery_level = self.battery_level - 0.2 if ((self.battery_level - 0.2) >= 0.0) else self.low_battery_level * 2.0
-        logger.info(self.battery_level)
+        logger.info("%s - %s", self.name, self.battery_level)
         return self.low_battery_level * 2.0 >= self.battery_level
 
     def move(self, position):
@@ -36,6 +39,13 @@ class RealisticDrone(Drone):
     def noop(self):
         # hover in place
         pass
+
+    def setState(self, state):
+        if "recordingVideo" in state.keys():
+            if state["recordingVideo"] is True and self.state["recordingVideo"] is False:
+                self.startRecording()
+            elif state["recordingVideo"] is False and self.state["recordingVideo"] is True:
+                self.stopRecording()
 
     def getBatteryLevel(self):
         # return battery level normalized to 0.0 - 1.0
@@ -60,4 +70,13 @@ class RealisticDrone(Drone):
                 position += (diff / 100.0)
                 self.position = tuple(position)
 
+            if self.isAtTarget(self.charger.getCoordinates()): # If at charger, slowly charge
+                self.battery_level += 0.001
+
             time.sleep(0.05)
+
+    def startRecording(self): # "Fake" method to simulate recording.
+        self.state["recordingVideo"] = True
+
+    def stopRecording(self): # "Fake" method to simulate stopping recording.
+        self.state["recordingVideo"] = False

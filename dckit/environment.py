@@ -48,10 +48,7 @@ class Environment(object):
     #        drone.initialize()
 
     def replaceDroneIfNeeded(self, drone, required_capabilities):
-        logger.info("CHECKING DRONE BATTERY")
         if drone is None or drone.isBatteryLow():
-            if drone is not None:
-                logger.info("DRONE BATTERY IS LOW ON DRONE %s: %s", drone.name, drone.battery_level)
             # dequeue a new drone
             drone = self.__droneManager.getDrone(required_capabilities)
         return drone

@@ -1,6 +1,7 @@
 from dckit import DCKit
 from dckit.tasks.task import Task
 from dckit.tasks.movement_task import MovementTask
+from dckit.tasks.videorecord_task import VideoRecordTask
 from dckit.drivers.realistic import RealisticDrone
 from dckit.drivers.kinectdrone import KinectDrone
 from dckit.charger.charger import Charger
@@ -46,6 +47,17 @@ task = Task("Maintask")
 subtask1 = MovementTask("1", (100, 1, 1))
 subtask2 = Task(" ")
 subtask3 = Task(" ")
+
+#Following for simulation with realistic drone.
+#subtask4 = MovementTask("6", (100, 100, 3))
+#subtask5 = Task(" ")
+#subtask6 = MovementTask("2", (-100, 50, 3))
+#subtask7 = MovementTask("5", (-80, 30, 10))
+#subtask8 = MovementTask("7", (-0, 10, 8))
+#subtask9 = MovementTask("4", (-0, 200, 10))
+#subtask10 = VideoRecordTask("3 - Video")
+
+
 subtask4 = MovementTask("5", (100, 100, 1))
 subtask5 = Task(" ")
 subtask6 = MovementTask("2", (-100, 50, 1))
@@ -62,6 +74,7 @@ subtask2.addSubtask(subtask4)
 subtask3.addSubtask(subtask5)
 subtask3.addSubtask(subtask7)
 subtask5.addSubtask(subtask6)
+subtask5.addSubtask(subtask10)
 subtask5.addSubtask(subtask9)
 task.addSubtask(subtask2)
 task.addSubtask(subtask8)
