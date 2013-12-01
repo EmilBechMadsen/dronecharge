@@ -87,6 +87,9 @@ class PositionVisualizer(object):
             # drone
             cv2.circle(img, position, drone_size, colors[i], -1)
 
+            # battery level
+            cv2.putText(img, "%s Battery: %s%%" % (drone.name, drone.battery_level * 100), (10, 20 * i + 20), cv2.cv.CV_FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 0))
+
             #logger.info("Position: %s", position)
 
         cv2.imshow(self.win, img)

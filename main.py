@@ -20,10 +20,10 @@ dckit = DCKit()
 
  # Initialize chargers
 charger1 = Charger("TopLeftCharger")
-charger1.setCoordinates(-200, -200, 0)
+charger1.setCoordinates(200, -200, 0)
 
 charger2 = Charger("TopRightCharger")
-charger2.setCoordinates(-200, -180, 0)
+charger2.setCoordinates(-200, 200, 0)
 
 charger3 = Charger("BottomRightCharger")
 charger3.setCoordinates(10, 0, 0)
@@ -37,11 +37,11 @@ drone.position = charger1.getCoordinates()
 drone.hue_range = (70, 100)
 dckit.addDrone(drone)
 
-drone2 = KinectDrone("Drone 2")
-drone2.charger = charger2
-drone2.position = charger2.getCoordinates()
-drone2.hue_range = (165, 180)
-dckit.addDrone(drone2)
+#drone2 = KinectDrone("Drone 2")
+#drone2.charger = charger2
+#drone2.position = charger2.getCoordinates()
+#drone2.hue_range = (165, 180)
+#dckit.addDrone(drone2)
 
 task = Task("Maintask")
 subtask1 = MovementTask("1", (100, 1, 1))

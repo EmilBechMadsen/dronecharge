@@ -18,7 +18,7 @@ class LandingTask(Task):
         self.drone.move(self.targetPosition)
 
     def isComplete(self):
-        if self.drone.isAtTarget(self.targetPosition, 1.5):
+        if self.drone.isAtTarget(self.targetPosition, 5):
             self.isCompleted = True
             logger.info("LANDING TASK COMPLETE")
         return self.isCompleted
