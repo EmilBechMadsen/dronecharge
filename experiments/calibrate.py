@@ -2,9 +2,17 @@ import numpy as np
 import cv2
 import freenect
 
+cv2.namedWindow("Image")
+cv2.moveWindow("Image", 0, 30)
+
 cv2.namedWindow("Tresh")
 cv2.moveWindow("Tresh", 800, 30)
-cv2.namedWindow("Image")
+
+cv2.namedWindow("Value")
+cv2.moveWindow("Value", 800, 500)
+
+cv2.namedWindow("Saturation")
+cv2.moveWindow("Saturation", 0, 500)
 
 x = 0
 y = 0
@@ -33,6 +41,7 @@ while True:
     image = cv2.cvtColor(orig, cv2.cv.CV_RGB2HSV)
     hue = image[:, :, 0]
     value = image[:, :, 2]
+    saturation = image[:, :, 1]
 
     cv2.circle(orig, (x, y), 3, (0, 0, 0), 1)
 
@@ -41,8 +50,8 @@ while True:
     # orig[:,:,0] = 0
     # orig[:,:,1] = 0
 
-    hue[hue < 70] = 0
-    hue[hue > 95] = 0
+    hue[hue < 75] = 0
+    hue[hue > 90] = 0
     hue[hue > 0] = 255
 
     hue = cv2.erode(hue, None, iterations=2)
@@ -75,3 +84,5 @@ while True:
         cv2.circle(orig, center, 5, (255, 0, 255), -1)
 
     cv2.imshow("Image", orig)
+    cv2.imshow("Value", value)
+    cv2.imshow("Saturation", saturation)

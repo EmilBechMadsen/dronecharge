@@ -82,6 +82,5 @@ class DCKit(object):
             if visualize:
                 task_visualizer.visualize()
                 position_visualizer.visualize()
-                #time.sleep(0.5)
 
             i += 1
