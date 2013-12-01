@@ -1,5 +1,6 @@
 from dckit.tasks.task import Task, TaskState
-
+import logging
+logger = logging.getLogger(__name__)
 
 class LandingTask(Task):
     def __init__(self, name, targetPosition):

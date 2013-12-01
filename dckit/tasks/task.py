@@ -62,7 +62,7 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
-        logger.debug("Evaluating task: %s", self.__class__)
+        logger.info("Evaluating task: %s", self.__class__)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:
             if self.isComplete():
