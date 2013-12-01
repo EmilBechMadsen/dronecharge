@@ -64,7 +64,14 @@ class KinectDrone(Drone):
             img, _ = freenect.sync_get_video()
 
             center = self.droneCenterFromImage(img)
-            
+            center = (
+                int(center[0] - img.shape[1] / 2),
+                int(center[1] - img.shape[0] / 2),
+                1
+            )
+
+            logger.info("Position: %s", center)
+
             self.position = center
 
     def angleFromCenterAndTail(center, tail):
@@ -92,7 +99,8 @@ class KinectDrone(Drone):
 
 
     def centerFromImage(self, image, hue_min, hue_max):
-        image = cv2.cvtColor(image, cv2.cv.CV_RGB2HSV)
+
+        image = cv2.cvtColor(image, cv2.cv.CV_BGR2HSV)
         hue = image[:, :, 0]
 
         # Filter out green postit note color
