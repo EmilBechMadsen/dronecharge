@@ -44,6 +44,11 @@ class DroneManager(object):
     def getAllDrones(self):
         return self.__avaliableDronesPool + self.__occupiedDronesPool
 
+    def stopAllDrones(self):
+        logger.info("Stopping all drone control loops")
+        for drone in self.getAllDrones():
+            drone.stopControlLoop()
+
     def refreshAvaliableDronesPool(self):
         for drone in self.__occupiedDronesPool:
             if drone.getBatteryLevel() >= 0.95:

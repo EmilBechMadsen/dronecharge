@@ -5,6 +5,7 @@ from dckit.drivers.realistic import RealisticDrone
 from dckit.drivers.kinectdrone import KinectDrone
 from dckit.charger.charger import Charger
 import logging
+import cProfile
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,13 +32,15 @@ charger4.setCoordinates(0, 0, 0)
 
 drone = KinectDrone("Drone 1")
 drone.charger = charger1
-#drone.position = charger1.getCoordinates()
+drone.position = charger1.getCoordinates()
+drone.hue_range = (70, 100)
 dckit.addDrone(drone)
 
-#drone2 = RealisticDrone("Drone 2")
-#drone2.charger = charger2
-#drone2.position = charger2.getCoordinates()
-#dckit.addDrone(drone2)
+drone2 = KinectDrone("Drone 2")
+drone2.charger = charger2
+drone2.position = charger2.getCoordinates()
+drone2.hue_range = (165, 180)
+dckit.addDrone(drone2)
 
 task = Task("Maintask")
 subtask1 = MovementTask("1", (100, 1, 1))

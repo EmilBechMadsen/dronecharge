@@ -81,7 +81,7 @@ class PositionVisualizer(object):
                 int(drone.target[0] + size[0] / 2),
                 int(drone.target[1] + size[1] / 2)
             )
-            cv2.line(img, beginning, end, (100, 100, 100), 1)
+            cv2.line(img, beginning, end, colors[i], 1)
 
             # bounding box
             cv2.circle(img, position, int(drone.bounding_radius), (100, 100, 100), 1)

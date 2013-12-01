@@ -14,6 +14,7 @@ class TaskVisualizer(object):
         self.init()
 
     def init(self):
+        self.shoud_stop = False
         self.graph = nx.DiGraph()
         # self.graph.node_attr['color'] = 'green'
 
@@ -42,19 +43,26 @@ class TaskVisualizer(object):
         for subtask in task.subtasks:
             self.walk_update(subtask)
 
+    def stop(self):
+        self.shoud_stop = True
+
     def visualize(self):
-        #while True:
-        if len(self.tasks) > 0:
-            self.walk_update(self.tasks[0])
+        self.shoud_stop = False
+        while True:
+            if self.shoud_stop:
+                break
 
-        colormap = ['red', 'yellow', 'green']
+            if len(self.tasks) > 0:
+                self.walk_update(self.tasks[0])
 
-        pos = nx.pygraphviz_layout(self.graph, prog='dot')
-        colors = [colormap[self.graph.node[n]['state']] for n in self.graph.nodes()]
-        labels = {n: self.graph.node[n]['label'] for n in self.graph.nodes()}
+            colormap = ['red', 'yellow', 'green']
 
-        nx.draw(self.graph, ax=self.ax, pos=pos, node_color=colors, labels=labels, node_size=2000)
-        # nx.draw(self.graph)
-        #self.fig.canvas.draw()
-        plt.draw()
-        #plt.pause(0.1)
+            pos = nx.pygraphviz_layout(self.graph, prog='dot')
+            colors = [colormap[self.graph.node[n]['state']] for n in self.graph.nodes()]
+            labels = {n: self.graph.node[n]['label'] for n in self.graph.nodes()}
+
+            nx.draw(self.graph, ax=self.ax, pos=pos, node_color=colors, labels=labels, node_size=2000)
+            # nx.draw(self.graph)
+            #self.fig.canvas.draw()
+            plt.draw()
+            #plt.pause(0.1)

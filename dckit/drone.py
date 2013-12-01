@@ -25,6 +25,7 @@ class Drone(object):
         self.low_battery_level = 0.1
         self.capabilities = []
         self.charger = None
+        self.loop_should_stop = False
 
     def initialize(self):
         self.starting_position = self.get_position()
@@ -69,9 +70,13 @@ class Drone(object):
         return abs(self.position[0] - target[0]) <= error_margin and  abs(self.position[1] - target[1]) <= error_margin and abs(self.position[2] - target[2]) <= error_margin
 
     def startControlLoop(self):
+        self.loop_should_stop = False
         self.thread = Thread(group=None, target=self.controlLoop)
         self.thread.daemon = True
         self.thread.start()
+
+    def stopControlLoop(self):
+        self.loop_should_stop = True
 
     def controlLoop(self):
         logger.error("Control Loop not implemented!")

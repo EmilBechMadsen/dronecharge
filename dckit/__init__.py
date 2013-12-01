@@ -4,6 +4,8 @@ from threading import Thread
 import logging
 import time
 import sys
+import cProfile
+import pstats
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +39,9 @@ class DCKit(object):
     def _iterate(self, iteration):
         tasks = self.environment.tasks
 
+        if len(tasks) == 0:
+            return False
+
         for task in tasks:
             if task.environment is None:
                 task.environment = self.environment
@@ -66,21 +71,27 @@ class DCKit(object):
         self._accumulateCapabilities()
 
         if visualize:
-            pass
-            #Thread(name=None, target=position_visualizer.visualize).start()
-            #Thread(name=None, target=task_visualizer.visualize).start()
+            thread = Thread(group=None, target=task_visualizer.visualize)
+            thread.daemon = True
+            thread.start()
 
         i = 0
         while True:
             logger.info("Iteration %s", i)
             # self.environment
 
-            if not self._iterate(i):
+            result = self._iterate(i)
+
+
+            if not result:
                 logger.debug("Iterate finished last iteration")
-                return
+                self.environment.stopAllDrones()
+                if visualize:
+                    task_visualizer.stop()
+                break
 
             if visualize:
-                task_visualizer.visualize()
+                #task_visualizer.visualize()
                 position_visualizer.visualize()
 
             i += 1

@@ -61,6 +61,9 @@ class KinectDrone(Drone):
 
     def controlLoop(self):
         while True:
+            if self.loop_should_stop:
+                break
+
             img, _ = freenect.sync_get_video()
 
             center = self.droneCenterFromImage(img)

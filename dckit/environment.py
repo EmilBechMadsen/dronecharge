@@ -39,6 +39,9 @@ class Environment(object):
         drone.startControlLoop()
         self.__droneManager.addDrone(drone)
 
+    def stopAllDrones(self):
+        self.__droneManager.stopAllDrones()
+
     #def start(self, timeout=300):
     #    for drone in self.drones:
     #        drone.setEnvironment(self)
