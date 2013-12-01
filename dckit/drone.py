@@ -25,6 +25,7 @@ class Drone(object):
         self.low_battery_level = 0.1
         self.capabilities = []
         self.charger = None
+        self.state = {}
 
     def initialize(self):
         self.starting_position = self.get_position()
@@ -56,10 +57,10 @@ class Drone(object):
         return required_capabilities.issubset(available_capabilities)
 
     def getState(self):
-        pass
+        return self.state
 
-    def setState(self):
-        pass
+    def setState(self, state):
+        raise NotImplementedError("Please Implement this method")
 
     def isAtTarget(self, target=None, error_margin=None):
         if target is None:

@@ -27,8 +27,9 @@ class Task(object):
         self.required_capabilities = []
         self.environment = environment
         self.ignores_low_battery = False
-        self.replacement_position = None
         self.repeat_mode = False
+        self.__saved_drone_state = {}
+        self.__replacement_position = None
 
     def start(self):
         self.state = TaskState.EXECUTING
@@ -63,6 +64,8 @@ class Task(object):
         return self.required_capabilities
 
     def evaluate(self):
+        if self.drone is not None:
+            logger.info("CURRENT DRONE STATE: %s", self.drone.state)
         logger.debug("Evaluating task: %s", self.__class__)
         currentSubtask = self.getCurrentSubtask()
         if currentSubtask is None:
@@ -79,8 +82,13 @@ class Task(object):
             logger.debug("Task Subtree Complete")
             if self.parent is None: # If task is Root
                 if self.repeat_mode: # If task is set to repeat, reset 
+                    if not self.ignores_low_battery:
+                        self.returnDroneToCharger(self.drone) # Return drone to charger if not already doing so.
                     self.environment.resetTaskTree(self)
                 else: # else delete
+                    if not self.ignores_low_battery:
+                        self.returnDroneToCharger(self.drone) # Return drone to charger if not already doing so.
+
                     self.environment.deleteTaskTree(self)
             return
 
@@ -97,14 +105,15 @@ class Task(object):
                         "Required capabilities: %s", self.required_capabilities
                     )
                     if self.drone is not None:
-                        self.original_state = self.drone.getState() # Save state
-                        self.replacement_position = self.drone.position
+                        self.__saved_drone_state = self.drone.getState() # Save state
+                        self.__replacement_position = self.drone.position
                         self.returnDroneToCharger(self.drone) # Return exhaused drone to charger.
                         self.setDrone(None)
                     return
 
                 if self.drone is not None and self.drone != replacementDrone:
-                    self.replacement_position = self.drone.position
+                    self.__replacement_position = self.drone.position
+                    self.__saved_drone_state = self.drone.getState() # Save state
                     self.switchDrones(self.drone, replacementDrone, currentSubtask)
                     return
 
@@ -152,7 +161,7 @@ class Task(object):
 
         # Second, move the new Drone into position and set the state.
 
-        replacement_task = ReplacementTask("ReplacementTask", self.replacement_position)
+        replacement_task = ReplacementTask("ReplacementTask", self.__replacement_position, self.__saved_drone_state)
         #replacement_task.originalState = drone.original_state
         replacement_task.setDrone(newDrone)
         

@@ -4,8 +4,6 @@ import time
 import logging
 import random
 import freenect
-
-
 logger = logging.getLogger(__name__)
 
 
