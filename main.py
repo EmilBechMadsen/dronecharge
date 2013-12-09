@@ -31,53 +31,61 @@ charger3.setCoordinates(10, 0, 0)
 charger4 = Charger("BottomLeftCharger")
 charger4.setCoordinates(0, 0, 0)
 
-drone = KinectDrone("Drone 1")
+drone = RealisticDrone("Drone 1")
 drone.charger = charger1
 drone.position = charger1.getCoordinates()
+drone.target = charger1.getCoordinates()
 drone.hue_range = (70, 100)
 dckit.addDrone(drone)
 
-#drone2 = KinectDrone("Drone 2")
-#drone2.charger = charger2
-#drone2.position = charger2.getCoordinates()
-#drone2.hue_range = (165, 180)
-#dckit.addDrone(drone2)
+drone2 = RealisticDrone("Drone 2")
+drone2.charger = charger2
+drone2.position = charger2.getCoordinates()
+drone2.target = charger2.getCoordinates()
+drone2.hue_range = (165, 180)
+dckit.addDrone(drone2)
 
 task = Task("Maintask")
 subtask1 = MovementTask("1", (100, 1, 1))
 subtask2 = Task(" ")
 subtask3 = Task(" ")
+kinectDemo = False
+if not kinectDemo:
+	#Following for simulation with realistic drone.
+	subtask4 = MovementTask("6", (100, 100, 3))
+	subtask5 = Task(" ")
+	subtask6 = MovementTask("2", (-100, 50, 3))
+	subtask7 = MovementTask("5", (-80, 30, 10))
+	subtask8 = MovementTask("7", (-0, 10, 8))
+	subtask9 = MovementTask("4", (-0, 200, 10))
+	subtask10 = VideoRecordTask("3 - Video")
+	task.addSubtask(subtask1)
+	subtask2.addSubtask(subtask3)
+	subtask2.addSubtask(subtask4)
+	subtask3.addSubtask(subtask5)
+	subtask3.addSubtask(subtask7)
+	subtask5.addSubtask(subtask6)
+	subtask5.addSubtask(subtask10)
+	subtask5.addSubtask(subtask9)
+	task.addSubtask(subtask2)
+	task.addSubtask(subtask8)
+else: 
+	subtask4 = MovementTask("5", (100, 100, 1))
+	subtask5 = Task(" ")
+	subtask6 = MovementTask("2", (-100, 50, 1))
+	subtask7 = MovementTask("4", (-80, 30, 1))
+	subtask8 = MovementTask("6", (-0, 10, 1))
+	subtask9 = MovementTask("3", (-0, 100, 1))
 
-#Following for simulation with realistic drone.
-#subtask4 = MovementTask("6", (100, 100, 3))
-#subtask5 = Task(" ")
-#subtask6 = MovementTask("2", (-100, 50, 3))
-#subtask7 = MovementTask("5", (-80, 30, 10))
-#subtask8 = MovementTask("7", (-0, 10, 8))
-#subtask9 = MovementTask("4", (-0, 200, 10))
-#subtask10 = VideoRecordTask("3 - Video")
-
-
-subtask4 = MovementTask("5", (100, 100, 1))
-subtask5 = Task(" ")
-subtask6 = MovementTask("2", (-100, 50, 1))
-subtask7 = MovementTask("4", (-80, 30, 1))
-subtask8 = MovementTask("6", (-0, 10, 1))
-subtask9 = MovementTask("3", (-0, 100, 1))
-
-# Probably need some way for each subtask to know which
-# parent-task it is under so we can reference it's drones and environment easily?
-
-task.addSubtask(subtask1)
-subtask2.addSubtask(subtask3)
-subtask2.addSubtask(subtask4)
-subtask3.addSubtask(subtask5)
-subtask3.addSubtask(subtask7)
-subtask5.addSubtask(subtask6)
-#subtask5.addSubtask(subtask10)
-#subtask5.addSubtask(subtask9)
-task.addSubtask(subtask2)
-task.addSubtask(subtask8)
+	task.addSubtask(subtask1)
+	subtask2.addSubtask(subtask3)
+	subtask2.addSubtask(subtask4)
+	subtask3.addSubtask(subtask5)
+	subtask3.addSubtask(subtask7)
+	subtask5.addSubtask(subtask6)
+	subtask5.addSubtask(subtask9)
+	task.addSubtask(subtask2)
+	task.addSubtask(subtask8)
 
 dckit.addTask(task)
 dckit.run(True)
