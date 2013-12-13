@@ -53,8 +53,8 @@ while True:
     # 10-60 // green circle
     # 165-180 // blue circle
 
-    hue[hue < 70] = 0
-    hue[hue > 100] = 0
+    hue[hue < 115] = 0
+    hue[hue > 130] = 0
     hue[hue > 0] = 255
 
     hue = cv2.erode(hue, None, iterations=2)

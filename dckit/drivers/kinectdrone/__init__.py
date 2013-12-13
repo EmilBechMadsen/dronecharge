@@ -30,7 +30,7 @@ class KinectDrone(Drone):
         self.have_kinect = video is not None
 
     def initialize(self):
-        pass
+        self.target = self.position
 
     def isBatteryLow(self): ## DRAINS 0.8 OF BATTERY PER TASK (Intended to run out fast for testing)
         self.battery_level = self.battery_level - 0.3 if ((self.battery_level - 0.3) >= 0.0) else self.low_battery_level * 2.0
@@ -85,6 +85,8 @@ class KinectDrone(Drone):
 
             if self.isAtTarget(self.charger.getCoordinates(), 10): # If at charger, slowly charge
                 self.battery_level += 0.005
+                if self.battery_level > 1.0:
+                    self.battery_level = 1.0
 
     def angleFromCenterAndTail(center, tail):
         tail = np.array(tail)
