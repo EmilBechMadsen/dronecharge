@@ -203,7 +203,8 @@ class ARDrone(object):
         self.at(at_led, 13,2,4)
         self.at(at_anim, 14, 5000)
 
-
+    def at_cmd(self, *args, **kwargs):
+        self.at(at_pcmd, *args, **kwargs)
 
     def at(self, cmd, *args, **kwargs):
         """Wrapper for the low level at commands.
