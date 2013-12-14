@@ -1,2 +1,18 @@
 \section{Discussion}
-Here, we'll discuss what could have been done differently to improve upon the design. If we experience any major setbacks that are not alleviated in time, this is the section in which we explain what it would require to produce the desired results -- such as using other type of drones for the usage example.
+In this section, we suggest improvements and alterations to the framework and discuss solutions to various issues mentioned in the evaluation.
+
+\subsection{Collision Detection}
+Collision detection is a very important lacking feature in the framework. It could be done by utilizing the fact that each driver constantly attempts to get the drone to a specified target. The framework knows the location and target of each drone, and could thus detect possible collisions and alter the target position temporarily for the colliding drones. This would alter the routes of each individual drone avoid their collision. This would be the case if the drones themselves did not have any sort of collision detection built-in. If a drone had that, then it would be a matter of including it in the movement loop in the individual driver.
+
+\subsection{Environment mapping}
+To add environment mapping to the framework, we could introduce the capability of adding shapes to the environment such as cubes or cylinders to represent objects. The framework could then easily alter routes to avoid collision with these objects during task execution.
+
+\subsection{Recovery Options}
+As is stated, there is no notion of contingency planning. If a task never completes, the drone would simply run out of battery and fall out of the sky. A few things could be done to alleviate this.
+
+First, the framework should be made capable of determining whether a task is stuck. This could be done, for instance, by measuring battery usage or by having the developer estimate the time this task would take to complete by a certain drone. Given this capability, the framework would be able to attempt alternate actions. As tasks need not neccesarily be about movement, this alternate action differs from task to task. It would be neccesary to allow for the developer to implement contingency tasks if the task fails to complete. Im a task failing to turn on a camera, the appropriate contingency plan could be landing and informing the developer, or turning down the quality of the recording.
+
+Second, it should be possible for the framework to alert developers in some kind of UI of the state of the drones. This way, if a drone becomes unresponsive, the framework can tell you exactly where this happened so that the developer can go find the drone. In a more futuristic approach, a specialized drone could even go collect it.
+
+\subsection{Automatically Checked Assumptions}
+As mentioned in the evaluation, we do not check that our assumptions are actually true in the drivers and tasks defined by the individual developer. What would be optimal is if we could add compile- or runtime checking to ensure that the tasks and drivers implemented by the developers uphold these assumptions. This could be done, for instance, by explicitely requiring that developers estimate the battery usage of each individual task. Naturally, different detection-strategies would need to be constructed for each assumption.
