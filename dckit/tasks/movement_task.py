@@ -26,7 +26,7 @@ class MovementTask(Task):
         self.drone.move(self.target)
 
         while True:
-            if self.drone.isAtTarget(self.target):
+            if self.drone.isAtTarget(self.target, 40):
                 self.isCompleted = True
                 logger.debug("Stopped Movement Task")
                 break
