@@ -14,9 +14,11 @@ DroneCharge was envisioned as a framework to be used by drone application develo
 Our overall architecture is depicted in Figure \ref{fig:architecturefig}. The most interesting concepts are the ideas of drone, task and environment. A task is performed in an environment that has a number of drones at its disposal, all of which are configured by the individual developer. As a developer, you would implement drivers for your specific drone that inherits from the drone class, and either utilize the built-in tasks or create your own extending from the task class. A drone instance representing each physical drone is then added to the environment along with their respective charging locations, as well as any number of tasks to be performed.
 
 \begin{figure}[h]
+\begin{center}
 \includegraphics[width=0.5\textwidth]{images/dronechargearchitecture.png}
 \caption{DroneCharge architecture}
 \label{fig:architecturefig}
+\end{center}
 \end{figure}
 
 \subsection{Drivers}
@@ -25,9 +27,15 @@ Drivers are, as is the definition, a way for the system to interact with the har
 \subsection{Tasks}
 Tasks define how individual steps of a task are performed. They contain a list of capabilities required to perform the task such as movement or video-recording, as well as instructions on how to perform the task. DroneCharge comes with a limited number of built-in tasks such as movement and landing, but any task can be performed by extending the task class and explicitly performing the task through the commands defined in the drone-drivers. The framework will only assign drones to perform the task if they meet the requirements for it, so you are guaranteed to have the right type of drone as long as your task and required capabilities are aligned. As an example, a custom driver for a drone with a video camera attached to it could implement a function called \textit{RecordVideo} as well as contain the capability \textit{recordvideo}. You could then define a task whose execution consisted of turning on a video camera. By specifying \textit{recordvideo} as a required capability of the task, the framework would not perform the task until a drone with said capability was available.
 \subsubsection{The Task Tree}
-By allowing tasks to be added to other tasks, we obtained a tree-structure view of tasks which enabled us to do a depth-first search traversel of tasks, and in that way achieve a sound logical structuring of tasks and subtasks. The tree is traversed in such a way that only leaf-node-tasks are actually performed. This enabled developers to logically split their tasks into subtrees however they saw fit and gave us increased flexibility. When a drone was to take over a task, a replacement-task could easily be inserted in that tree that moved the drone to the position of the depleted drone and perform other actions such as copying the state of the previous drone.
+By allowing tasks to be added to other tasks, we obtained a tree-structure view of tasks which enabled us to do a depth-first search traversel of tasks, and in that way achieve a sound logical structuring of tasks and subtasks. An example of such a tree is depicted in Figure \ref{fig:tasktree}. The tree is traversed in such a way that only leaf-node-tasks are actually performed. This enabled developers to logically split their tasks into subtrees however they saw fit and gave us increased flexibility. When a drone was to take over a task, a replacement-task could easily be inserted in that tree that moved the drone to the position of the depleted drone and performed other actions such as copying the state of the previous drone, turning on sensors etc.
 
-\todo{Image of graph}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[height=7cm]{images/task-graph.png}
+\caption{The Task Tree -- NB: Nodes are \textit{not} ordered in a DFS-like manner as is the case internally}
+\label{fig:tasktree}
+\end{center}
+\end{figure}
 
 \subsection{Assumptions and requirements}
 When using the DroneCharge framework, developers had to be aware of the assumptions and requirements made in terms of the capabilities and implementation of the drivers and the drones themselves.
