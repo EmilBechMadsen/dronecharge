@@ -1,6 +1,7 @@
 .DS_Store
 TSWLatexian*
 .sublime-project
+*.pdf
 
 *.acn
 *.acr
