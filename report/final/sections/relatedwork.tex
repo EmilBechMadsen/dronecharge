@@ -1,7 +1,45 @@
 \section{Related Work}
+While we did not find previous work that focused on the same problem, we found several projects that all did some part of what we wanted, e.g. automated landing, inductive charging or drone swarms.
+
 B\"urkle et. al proposed the idea of a swarm of drones fulfilling a task rather than a single drone in their article \textit{Towards Autonomous Micro UAV Swarms}\,\cite{burkleetal}. They suggested a system for inter-drone cooperation to seamlessly orchestrate several drones with different types of sensors in an environment. They also utilized simulation to test their system. This system was far larger than our solution and encompassed several other aspects that we did not consider. It inspired the idea for us to simulate drone movement during development for a much more efficient development process.
 
 Sima Mitra presented an Autonomous Quadcopter Docking System\,\cite{simamitra} that allowed drones to return to a charging station using computer vision for locating the docking station. In it, she showed that autonomously returning to a charging station was fully possible without a fixed locationing system. Although our framework expects some kind of locationing system for the airborne drones, this was useful as it demonstrated the automated landing on a specified target as battery depletes. The inherent limits of the reliance on computer vision were, however, not desirable.
+
+\begin{table*}[ht]
+\begin{tabular*}{\textwidth}{ l | c c c c c c }
+
+& 
+\parbox{0.1\textwidth}{\centering Aut. UAV \\ Swarms\,\cite{burkleetal}} & 
+\parbox{0.1\textwidth}{\centering Autonomous \\ Docking\,\cite{simamitra}} & 
+\parbox{0.12\textwidth}{\centering Visual \\ Feedback\,\cite{altugetal}\,\cite{ducardetal}} & 
+\parbox{0.12\textwidth}{\centering Inductive  \\ Charging\,\cite{bostonuni}} & 
+\parbox{0.12\textwidth}{\centering SolarCopter\,\cite{solarcopter}} & 
+DroneCharge
+
+\\ [2ex] \hline \\ [-1.5ex]
+Visual control &  & \checkmark & \checkmark &  &  & (\checkmark)
+\\ [0.5ex] \hline \\ [-1.5ex]
+Auto-landing & (\checkmark)  & \checkmark &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Notion of tasks & \checkmark  &  &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Extensibility & \checkmark &  &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Inter-drone cooperation &  \checkmark &  & (\checkmark) &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Eval. using simulation & \checkmark  &  &  &  &  &  (\checkmark)
+\\ [0.5ex] \hline \\ [-1.5ex]
+Drone auto-charging &   & (\checkmark) &  & \checkmark & \checkmark & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Sustainable &   &  &  &  & \checkmark &
+\\ [0.5ex] \hline \\ [-1.5ex]
+Drone autonomy & \checkmark  & \checkmark & (\checkmark) & \checkmark &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Inexpensiveness & & (\checkmark) & \checkmark & (\checkmark) &  & \checkmark
+\end{tabular*}
+\caption{Research Topics}
+\label{tab:topics}
+\end{table*}
 
 Both Altug et al.\,\cite{altugetal} and Ducard et. al.\,\cite{ducardetal} demonstrated the use of visual feedback for positioning and autonomous control of a drone. This was useful for the practical part of this project in which a kinect was used to track drones in order to autonomously perform tasks.
 
@@ -19,40 +57,5 @@ While the work of Boston University indeed showed that conductive charging of ae
 
 The SolarCopter provides an alternative to the drone swarm, but adds complications in regards t o drone size and weather requirements. One could imagine a mixture, however, in which a solar powered drone could charge conventional drones and act as a swarm staging area.
 
-Table \ref{tab:topics} highlights the research topics of the various solutions. While we did not attempt to achieve sustainable drones, we did, to some degree, deal with all other application areas that are addressed by the above mentioned solutions. The various checkmarks means that the paper or project addressed the research topic in some way other another. Checkmarks in parentheses were less significant to the project in question.
+Table \ref{tab:topics} highlights the research topics of the various solutions. While we did not attempt to achieve sustainable drones, we did, to some degree, deal with all other application areas that are addressed by the above mentioned solutions. The checkmarks means that the paper or project addressed the research topic in some way other another. Checkmarks in parentheses were less significant to the project in question, such as in the case of Visual Control for DroneCharge, which was used as a locationing system but as such not very important to the framework itself.
 
-\begin{table*}[ht]
-\begin{tabular*}{\textwidth}{ l | c c c c c c }
-
-& 
-\parbox{0.1\textwidth}{\centering Aut. UAV \\ Swarms\,\cite{burkleetal}} & 
-\parbox{0.1\textwidth}{\centering Autonomous \\ Docking\,\cite{simamitra}} & 
-\parbox{0.12\textwidth}{\centering Visual \\ Feedback\,\cite{altugetal}\,\cite{ducardetal}} & 
-\parbox{0.12\textwidth}{\centering Inductive  \\ Charging\,\cite{bostonuni}} & 
-\parbox{0.12\textwidth}{\centering SolarCopter\,\cite{solarcopter}} & 
-DroneCharge
-
-\\ [2ex] \hline \\ [-1.5ex]
-Visual control &  & \checkmark & \checkmark &  &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Auto-landing & (\checkmark)  & \checkmark &  &  &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Notion of tasks & \checkmark  &  &  &  &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Extensibility & \checkmark &  &  &  &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Inter-drone cooperation &  \checkmark &  & \checkmark &  &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Eval. using simulation & \checkmark  &  &  &  &  &  \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Drone auto-charging &   & \checkmark &  & \checkmark & \checkmark & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Sustainable &   &  &  &  & \checkmark &
-\\ [0.5ex] \hline \\ [-1.5ex]
-Drone autonomy & \checkmark  & \checkmark & \checkmark & \checkmark &  & \checkmark
-\\ [0.5ex] \hline \\ [-1.5ex]
-Inexpensiveness & & \checkmark & \checkmark & \checkmark &  & \checkmark
-\end{tabular*}
-\caption{Research Topics}
-\label{tab:topics}
-\end{table*}

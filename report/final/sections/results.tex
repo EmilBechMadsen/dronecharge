@@ -31,7 +31,7 @@ The bulk of driver implementation was the translation between the locationing sy
 \end{center}
 \end{figure}
 
-All in all, the driver was 
+All in all, the driver was simple to implement, although we admittedly did have prior knowledge of the assumptions made for the drivers which simplified the process. However, the amount of code written to create the driver was almost neglible which speaks to the power of the approach. The code that we did have to write we would have written in any case if we were to do programmatic drone control.
 
 \subsection{Developer survey}
 To gauge whether this would be useful for real-world developers, we posted a survey along with a description of the system on several of the largest drone-development internet forums. Although only a limited amount of developers replied, five in total, we felt comfortable that the level of interest was adequate. 
@@ -42,7 +42,7 @@ One developer also noted that our suggested way of positining the drone was inad
 
 All in all, we believe it is safe to say that the interest in automatic charging of drones is present, although  responses may have been skewed by the possibility that only interested developers replied to the survey.
 
-\subsection{Finding The Right Level of Abstraction}
+\subsection{Finding the Right Level of Abstraction}
 In the beginning of the project, we wanted to also simplify drone-control implementation by only requiring the developer to implement atomic functions such as a command to move forward, fly up or down, or left or right. We would then supply high-level commands such as move to specific coordinates free of charge. However, we soon realized that drone control varies based on the type of drone, and that it was best to leave the specifics of controlling the drone to the implementer. While this left more responsibility to the implementer, which is arguably a negative property of a framework, it added a neccessary degree of flexibility. If we were to develop high-level commands, it would likely lead to less optimized flying routines and glitchy movement. Letting each individual developer do this allowed for very optimized flying for each individual type of drone. We also argue, that any drone implementer would need to implement drone controls to programatically utilize drones in either case, so the only thing our framework would then require, was that the control-code was written in a different location.
 
 \subsection{Assumptions and Ease of Use}
