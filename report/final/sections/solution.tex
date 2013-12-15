@@ -14,11 +14,10 @@ We envisioned DroneCharge as a framework to be used by drone application develop
 Our overall architecture is depicted in Figure \ref{fig:architecturefig}. The most interesting concepts are the ideas of drone, task and environment. A task is performed in an environment that has a number of drones at its disposal, all of which are configured by the individual developer. As a developer, you would implement drivers for your specific drone that inherits from the \textit{Drone} class, and either utilize the built-in tasks or create your own extension of the \textit{Task} class. A drone instance representing each physical drone is then added to the environment along with their respective charging locations, as well as any number of tasks to be performed.
 
 \begin{figure}[h]
-\begin{center}
+\centering
 \includegraphics[width=\columnwidth]{images/dronechargearchitecture.png}
 \caption{DroneCharge architecture}
 \label{fig:architecturefig}
-\end{center}
 \end{figure}
 
 \subsection{Environment}
@@ -35,7 +34,7 @@ By allowing tasks to be added to other tasks, we obtained a tree-structure view 
 
 \begin{figure}[h]
 \begin{center}
-\includegraphics[height=7cm]{images/task-graph.png}
+\includegraphics[height=7cm]{images/task-graph.png}%
 \caption{The Task Tree -- NB: Nodes are \textit{not} ordered in a DFS-like manner as is the case internally}
 \label{fig:tasktree}
 \end{center}
