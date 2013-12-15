@@ -88,6 +88,7 @@ while True:
 
         cv2.circle(orig, center, 5, (255, 0, 255), -1)
 
+    cv2.circle(orig, (320, 240), 3, (255, 255, 255), -1)
     cv2.imshow("Image", orig)
     cv2.imshow("Value", value)
     cv2.imshow("Saturation", saturation)

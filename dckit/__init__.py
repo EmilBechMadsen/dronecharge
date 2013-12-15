@@ -3,6 +3,7 @@ from dckit.tasks.task import TaskState
 from threading import Thread
 import logging
 import time
+import cv2
 import sys
 import cProfile
 import pstats
@@ -75,9 +76,11 @@ class DCKit(object):
             thread.daemon = True
             thread.start()
 
+        cv2.waitKey(0)
+
         i = 0
         while True:
-            logger.info("Iteration %s", i)
+            # logger.info("Iteration %s", i)
             # self.environment
 
             start = time.time()
@@ -97,6 +100,6 @@ class DCKit(object):
                 position_visualizer.visualize()
 
             duration = time.time() - start
-            logger.info("Iteration duration: %s", duration)
+            # logger.info("Iteration duration: %s", duration)
 
             i += 1

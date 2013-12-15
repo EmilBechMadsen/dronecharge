@@ -1,4 +1,7 @@
 from dckit.drone import Drone
+from dckit.drivers.ardrone.libardrone import ARDrone as ARDroneAPI
+from dckit.drivers.ardrone.visual import centerFromImage, angleFromCenterAndTail
+from dckit.drivers.ardrone.pid import PID
 import time
 import logging
 import freenect
@@ -9,10 +12,10 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 
-class KinectDrone(Drone):
+class ARDrone(Drone):
     """docstring for KinectDrone"""
     def __init__(self, name, environment=None):
-        super(KinectDrone, self).__init__(name, environment)
+        super(ARDrone, self).__init__(name, environment)
         self.battery_level = 1.0
         self.diameter = 0.0
 
@@ -24,16 +27,20 @@ class KinectDrone(Drone):
             "move"
         ]
 
-        self.hue_range = (75, 90)
+        self.is_flying = False
+        self.low_battery_level = 0.1
 
         video = freenect.sync_get_video()
         self.have_kinect = video is not None
+
+        self.drone = ARDroneAPI(True, True)
 
     def initialize(self):
         self.target = self.position
 
     def isBatteryLow(self): ## DRAINS 0.8 OF BATTERY PER TASK (Intended to run out fast for testing)
-        self.battery_level = self.battery_level - 0.3 if ((self.battery_level - 0.3) >= 0.0) else self.low_battery_level * 2.0
+        self.battery_level = self.battery_level - 0.1 if ((self.battery_level - 0.1) >= 0.0) else self.low_battery_level * 2.0
+        logger.info("%s - %s", self.name, self.battery_level)
         return self.low_battery_level * 2.0 >= self.battery_level
 
     def move(self, position):
@@ -45,7 +52,6 @@ class KinectDrone(Drone):
         pass
 
     def getBatteryLevel(self):
-        # return battery level normalized to 0.0 - 1.0
         return self.battery_level
 
     def getPosition(self):
@@ -62,94 +68,71 @@ class KinectDrone(Drone):
     def setState(self, state):
         pass
 
+    def takeoff(self):
+        logger.info("Drone takeoff")
+        self.drone.takeoff()
+        time.sleep(5)
+        self.is_flying = True
+
+    def land(self):
+        logger.info("Drone land")
+        self.drone.land()
+        self.is_flying = False
+
+    def hover(self):
+        self.drone.hover()
+
     def controlLoop(self):
-        while True:
-            if self.loop_should_stop:
-                break
+        try:
+            kp = 0.2
+            kd = 0.1
+            ki = 0.0005
 
-            img, _ = freenect.sync_get_video()
+            x_pid = PID(Kp=kp, Kd=kd, Ki=ki)
+            y_pid = PID(Kp=kp, Kd=kd, Ki=ki)
 
-            center = self.droneCenterFromImage(img)
+            angle_pid = PID(Kp=1.5, Kd=0.5, Ki=0.05)
 
-            center = (
-                int(center[0] - img.shape[1] / 2),
-                int(center[1] - img.shape[0] / 2),
-                1
-            )
+            while True:
+                image = freenect.sync_get_video()[0]
+                image = cv2.cvtColor(image, cv2.cv.CV_BGR2RGB)
 
-            del img
+                target = (int(self.target[0] + 320), int(self.target[1] + 240))
+                center = centerFromImage(image, 10, 20)
+                tail = centerFromImage(image, 75, 90)
 
-            logger.debug("Position: %s", center)
+                cv2.line(image, target, tuple(center), (255, 0, 0))
+                cv2.circle(image, tuple(center), 3, (0, 0, 255), -1)
+                cv2.circle(image, tuple(tail), 3, (255, 0, 0), -1)
+                cv2.circle(image, target, 10, (0, 0, 0), 3)
 
-            self.position = center
+                distance_x = center[0] - target[0]
+                distance_y = center[1] - target[1]
 
-            if self.isAtTarget(self.charger.getCoordinates(), 10): # If at charger, slowly charge
-                self.battery_level += 0.005
-                if self.battery_level > 1.0:
-                    self.battery_level = 1.0
+                distance_x /= -320.0
+                distance_y /= -240.0
 
-    def angleFromCenterAndTail(center, tail):
-        tail = np.array(tail)
-        center = np.array(center)
+                angle = angleFromCenterAndTail(center, tail) / -180.0
 
-        sign = np.sign(center[0] - tail[0])
+                rl = x_pid.GenOut(distance_x)
+                fb = y_pid.GenOut(distance_y)
+                aa = angle_pid.GenOut(angle)
 
-        vec = np.array(tail - center, dtype='float32')
-        vlen = np.linalg.norm(vec)
-        vec[0] /= vlen
-        vec[1] /= vlen
+                if np.isnan(aa):
+                    aa = 0.0
 
-        angle = np.arccos(np.dot(vec, np.array([0, 1]))) * 180.0 / np.pi
+                self.position = (center[0] - 320.0, center[1] - 240.0, 10)
 
-        return sign * angle
+                if self.isAtTarget(self.charger.getCoordinates(), 20) and self.battery_level < 1.0: # If at charger, slowly charge
+                    self.battery_level += 0.01
 
-
-    def droneCenterFromImage(self, image):
-        return self.centerFromImage(image, self.hue_range[0], self.hue_range[1])
-
-
-    def droneTailCenterFromImage(self, image):
-        return self.centerFromImage(image, 85, 100)
-
-
-    def centerFromImage(self, image, hue_min, hue_max):
-
-        image = cv2.cvtColor(image, cv2.cv.CV_BGR2HSV)
-        hue = image[:, :, 0]
-
-        # Filter out green postit note color
-        # yellow is 90-100
-        # pink is 137-150
-        # green is 80-90
-        hue[hue < hue_min] = 0
-        hue[hue > hue_max] = 0
-        hue[hue > 0] = 255
-
-        hue = cv2.erode(hue, None, iterations=2)
-        hue = cv2.dilate(hue, None, iterations=2)
-
-        contours, hierarchy = cv2.findContours(
-            hue,
-            cv2.RETR_LIST,
-            cv2.CHAIN_APPROX_SIMPLE
-        )
-
-        center = [0, 0]
-
-        if len(contours) > 0:
-            contour = contours[0]
-            area = cv2.contourArea(contour)
-
-            for c in contours:
-                if cv2.contourArea(c) > area:
-                    area = cv2.contourArea(c)
-                    contour = c
-
-            m = cv2.moments(contour)
-            center = [0, 0]
-            if m['m00'] != 0:
-                center = [m['m10'] / m['m00'], m['m01'] / m['m00']]
-
-            center = [int(center[0]), int(center[1])]
-
-        return center
+                if self.is_flying:
+                    self.drone.at_cmd(True, rl, fb, 0, aa)
+                    # logger.info("Set Drone: %s, %s, %s", rl, fb, aa)
+        except Exception, e:
+            logger.warning("Exception %s", e)
+        finally:
+            # drone.reset()
+            self.drone.land()
+            self.drone.halt()
+            logger.info("Drone Stopped")

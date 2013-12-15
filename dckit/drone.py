@@ -70,6 +70,12 @@ class Drone(object):
             error_margin = self.bounding_radius
         return abs(self.position[0] - target[0]) <= error_margin and  abs(self.position[1] - target[1]) <= error_margin and abs(self.position[2] - target[2]) <= error_margin
 
+    def takeoff(self):
+        pass
+
+    def land(self):
+        pass
+
     def startControlLoop(self):
         self.loop_should_stop = False
         self.thread = Thread(group=None, target=self.controlLoop)

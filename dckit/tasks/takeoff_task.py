@@ -4,23 +4,26 @@ import logging
 import time
 logger = logging.getLogger(__name__)
 
-class LandingTask(Task):
-    def __init__(self, name="Landing", target=(0, 0, 0)):
-        super(LandingTask, self).__init__(name)
+class TakeoffTask(Task):
+    def __init__(self, name="Takeoff"):
+        super(TakeoffTask, self).__init__(name)
 
         self.isCompleted = False
-        self.target = target
+        self.target = (0, 0, 0)
         self.required_capabilities = [
             "move"
         ]
 
     def start(self):
+        logger.info("Task Takeoff Start")
         self.state = TaskState.EXECUTING
-        time.sleep(5)
-        self.drone.land()
+        self.target = self.drone.position
+        self.drone.takeoff()
+        time.sleep(3)
+        self.isCompleted = True
 
     def isComplete(self):
-        return True
+        return self.isCompleted
 
     def __repr__(self):
         ret = "\n\t<LandingTask (" + self.name + ") "

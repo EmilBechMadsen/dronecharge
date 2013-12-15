@@ -1,6 +1,5 @@
 from dckit.tasks.task import Task
 from dckit.tasks.landing_task import LandingTask
-from dckit.charger.charger_manager import ChargerManager
 from dckit.drone_manager import DroneManager
 from dckit.tasks.movement_task import MovementTask
 import logging
@@ -54,9 +53,9 @@ class Environment(object):
         return drone
 
     def resetTaskTree(self, taskRoot):
-        for subtask in task.subtasks:
+        for subtask in taskRoot.subtasks:
             subtask.state = TaskState.READY
-            resetTask(subtask)
+            self.resetTasktree(subtask)
         taskRoot.state = TaskState.READY
 
     def deleteTaskTree(self, taskRoot):

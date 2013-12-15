@@ -18,12 +18,12 @@ class DroneManager(object):
         self.__avaliableDronesPool.append(drone)
 
     def anyDroneReady(self):
-        logger.info("Drones available: %s", len(self.__avaliableDronesPool))
+        # logger.info("Drones available: %s", len(self.__avaliableDronesPool))
         return len(self.__avaliableDronesPool) > 0
     
     def getDrone(self, capabilities):
         self.refreshAvaliableDronesPool()
-        logger.info("Drones available: %s", len(self.__avaliableDronesPool))
+        # logger.info("Drones available: %s", len(self.__avaliableDronesPool))
         capableDrones = []
         for drone in self.__avaliableDronesPool:
             if not drone.hasCapabilities(capabilities):

@@ -24,6 +24,7 @@ class ReplacementTask(Task):
             logger.warn("ReplacementTask started with no drone assigned!")
             return
 
+        self.drone.takeoff()
         self.drone.move(self.targetPosition)
         self.drone.setState(self.droneState)
 

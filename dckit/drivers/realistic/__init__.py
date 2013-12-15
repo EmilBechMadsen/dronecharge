@@ -28,7 +28,7 @@ class RealisticDrone(Drone):
         pass
 
     def isBatteryLow(self): ## DRAINS 0.5 OF BATTERY PER TASK (Intended to run out fast for testing)
-        self.battery_level = self.battery_level - 0.2 if ((self.battery_level - 0.2) >= 0.0) else self.low_battery_level * 2.0
+        self.battery_level = self.battery_level - 0.4 if ((self.battery_level - 0.4) >= 0.0) else self.low_battery_level * 2.0
         logger.info("%s - %s", self.name, self.battery_level)
         return self.low_battery_level * 2.0 >= self.battery_level
 
@@ -58,6 +58,12 @@ class RealisticDrone(Drone):
     def isCharged(self):
         return self.battery_level > 0.8
 
+    def takeoff(self):
+        pass
+
+    def land(self):
+        pass
+
     def controlLoop(self):
         while True:
             original = np.array(self.original_position, dtype=np.float32)
@@ -71,7 +77,8 @@ class RealisticDrone(Drone):
                 self.position = tuple(position)
 
             if self.isAtTarget(self.charger.getCoordinates()): # If at charger, slowly charge
-                self.battery_level += 0.001
+                if self.battery_level < 1.0:
+                    self.battery_level += 0.01
 
             time.sleep(0.05)
 
