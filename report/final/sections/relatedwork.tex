@@ -21,38 +21,38 @@ The SolarCopter provides an alternative to the drone swarm, but adds complicatio
 
 Figure \ref{fig:features} highlights the features of the various solutions. While we did not attempt to achieve sustainable drones, we did, to some degree, deal with all other application areas that are addressed by the above mentioned solutions.
 
-\begin{figure}[h]
-\begin{tabular*}{0.475\textwidth}{
-p{\dimexpr 0.27\linewidth-1\tabcolsep} |
-p{\dimexpr 0.10\linewidth-2\tabcolsep} 
-p{\dimexpr 0.10\linewidth-2\tabcolsep} 
-p{\dimexpr 0.10\linewidth-2\tabcolsep} 
-p{\dimexpr 0.10\linewidth-2\tabcolsep} 
-p{\dimexpr 0.10\linewidth-2\tabcolsep} 
-p{\dimexpr 0.12\linewidth-2\tabcolsep} 
-p{\dimexpr 0.12\linewidth-2\tabcolsep}}
-& B\"urk. & Mit. & Alt. & Duc. & Bost. & Abi. & DC\\
-\hline
-Visual control &  & \checkmark & \checkmark & \checkmark &  &  & \checkmark \\
-\hline
-Auto-landing & \checkmark  & \checkmark &  &  &  &  & \checkmark \\
-\hline
-Tasks & \checkmark  &  &  &  &  &  & \checkmark \\
-\hline
-Extensibility & \checkmark &  &  &  &  &  & \checkmark \\
-\hline
-Cooperation &  \checkmark &  & \checkmark & \checkmark &  &  & \checkmark \\
-\hline
-Simulation & \checkmark  &  &  &  &  &  &  \checkmark \\
-\hline
-Auto-charging &   & \checkmark &  &  & \checkmark & \checkmark & \checkmark \\
-\hline
-Sustainable &   &  &  &  &  & \checkmark &  \\
-\hline
-Autonomy & \checkmark  & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark \\
-\hline
-Low Resource & & \checkmark & \checkmark & \checkmark & \checkmark &  & \checkmark
+\begin{table*}[ht]
+\begin{tabular*}{\textwidth}{ l | c c c c c c }
+
+& 
+\parbox{0.1\textwidth}{\centering Aut. UAV \\ Swarms\,\cite{burkleetal}} & 
+\parbox{0.1\textwidth}{\centering Autonomous \\ Docking\,\cite{simamitra}} & 
+\parbox{0.12\textwidth}{\centering Visual \\ Feedback\,\cite{altugetal}\,\cite{ducardetal}} & 
+\parbox{0.12\textwidth}{\centering Inductive  \\ Charging\,\cite{bostonuni}} & 
+\parbox{0.12\textwidth}{\centering SolarCopter\,\cite{solarcopter}} & 
+DroneCharge
+
+\\ [2ex] \hline \\ [-1.5ex]
+Visual control &  & \checkmark & \checkmark &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Auto-landing & \checkmark  & \checkmark &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Notion of tasks & \checkmark  &  &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Extensibility & \checkmark &  &  &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Inter-drone cooperation &  \checkmark &  & \checkmark &  &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Eval. using simulation & \checkmark  &  &  &  &  &  \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Drone auto-charging &   & \checkmark &  & \checkmark & \checkmark & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Sustainable &   &  &  &  & \checkmark &
+\\ [0.5ex] \hline \\ [-1.5ex]
+Drone autonomy & \checkmark  & \checkmark & \checkmark & \checkmark &  & \checkmark
+\\ [0.5ex] \hline \\ [-1.5ex]
+Inexpensiveness & & \checkmark & \checkmark & \checkmark &  & \checkmark
 \end{tabular*}
-\caption{Feature comparison}
+\caption{Research Coverage}
 \label{fig:features}
-\end{figure}
+\end{table*}
