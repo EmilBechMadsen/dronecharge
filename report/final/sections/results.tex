@@ -54,7 +54,7 @@ Currently, there are no fallback procedures if a drone enters an emergency state
 
 On the other hand, if a drone were to be caught in a task, say for instance because a movement task attempted to fly the drone through a wall, there are no built-in contingencies to ensure that the task is ever completed. However, this could be handled in the drone driver by detecting abnormal behaviour and altering the route to the target.
 
-\subsection{Collision detection and Environment mapping}
+\subsection{Collision Detection and Environment Mapping}
 Currently, there is no notion of environment mapping. This means that for the framework to function, the area of operations must be a clear area with no  objects in the way. This is naturally not a practical solution for real world tasks, but was decided for the purpose of simplicity. That there be no objects in the zone includes other drones, which causes problems when having several drones performing tasks or swapping with each other at the same time. This is, however, mainly a smaller issue as collision detection is something that is accounted for but was left as an additional module should time permit. 
 
 \subsection{Level of fulfillment}
