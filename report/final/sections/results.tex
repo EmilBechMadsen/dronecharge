@@ -8,17 +8,17 @@ In the initial stages of this project, we experimented with developing drivers f
 \subsubsection{Simulated approach - Wizard of Oz}
 While our initial experiments gave us some more ideas on how to define the drone drivers, it did not allow us to physically test the framework. Instead, we focused on developing the framework by relying more on simulation and visualization for validation. We created visualization tools to illustrate the task tree as a coloured graph, and created a usage scenario in which a Microsoft Kinect tracked a drone. Rather than the drone moving itself, a Wizard of Oz approach was used in which a human actor purposefully moved the drone in the pattern indicated by the framework in order to perform the task. This was done using the video-feed from the Kinect and adding overlays with markings for the drone and its target position. For a video demonstration of the wizard of oz, we uploaded a video on YouTube which can be found in the footnotes\footnote{DroneCharge: https://www.youtube.com/watch?v=32yjwRk\_SrM}. A screenshot of the video-feed with the overlay can be seen in Figure \ref{fig:wizardofoz}.
 
+This approach allowed us to verify that the framework would act as intended provided that the drivers being used were implement as per specification.  While it was not as definitive proof as a real-life application, it provided us with enough verification to move on to a real drone.
+
+\subsubsection{Driver Implementation - ARDrone}
+Once the framework was in a relatively stable state, we went on to evaluate the framework by using it with an AR Drone. We kept the Kinect for tracking, and implemented the driver for the AR Drone. This was really straightforward, since we already had a driver for the Crazyflie. Where the Crazyflie was too unstable to reliably move around, the AR Drone had none of these problems. since the AR Drones API was essentially just a drop-in replacement, we only needed to import the AR Drone library\footnote{ARDrone: https://github.com/venthur/python-ardrone} and adapt the Crazyflie driver with a couple of lines of code.
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{images/wizardofoz.png}
 \caption{Framework veritication using the Wizard of Oz approach for drone movement.}
 \label{fig:wizardofoz}
 \end{figure}
-
-This approach allowed us to verify that the framework would act as intended provided that the drivers being used were implement as per specification.  While it was not as definitive proof as a real-life application, it provided us with enough verification to move on to a real drone.
-
-\subsubsection{Driver Implementation - ARDrone}
-Once the framework was in a relatively stable state, we went on to evaluate the framework by using it with an AR Drone. We kept the Kinect for tracking, and implemented the driver for the AR Drone. This was really straightforward, since we already had a driver for the Crazyflie. Where the Crazyflie was too unstable to reliably move around, the AR Drone had none of these problems. since the AR Drones API was essentially just a drop-in replacement, we only needed to import the AR Drone library\footnote{ARDrone: https://github.com/venthur/python-ardrone} and adapt the Crazyflie driver with a couple of lines of code.
 
 The bulk of driver implementation was the translation between the locationing system into the Frameworks coordinates and vice versa. Because we had already written all of this for Crazyflie, swapping it for the AR Drone was done in just a couple of hours with all the testing included. Apart from the method and class names that had to be changed, the only difference was in how the tilt angle is normalized before being passed on to the driver, which was just a trivial mathematical operation. The AR Drones firmware has proven to be much more stable than the Crazyflies. The drone was able to hold its position when asked, and responded to our commands well, which quickly gave us a working prototype. Figure \ref{fig:ardrone} depicts an image of the drone being controlled by the framework. A video of the working prototype following a series of movement tasks can be found in the footnotes\footnote{DroneCharge: https://www.youtube.com/watch?v=Ei9mQTNHUgA}.
 

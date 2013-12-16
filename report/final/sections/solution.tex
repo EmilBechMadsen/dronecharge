@@ -20,6 +20,11 @@ Our overall architecture is depicted in Figure \ref{fig:architecturefig}. The mo
 \label{fig:architecturefig}
 \end{figure}
 
+\subsection{Language Selection}
+We looked at the language support in the libraries of the drones we considered good match for our goals and it turned out that most of them have either Python wrappers, or are written in Python. In addition, it is the case that Python code can easily be ported to other platforms such as .NET through IronPython or Java through Jython. This enables the driver implementors to write the actual drivers on almost any other platform, which makes the framework compatible with most drones, but also allows it to retain a very high level of abstraction and code readability. One possible drawback of Python is that because it is an interpreted language, it is slower than some other platforms, but in our testing we did not percieve this as a real limitation. 
+
+It is also the case that Python is very loosely typed, so it allows for a lot of flexibility in the definition of driver and task interfaces.
+
 \subsection{Environment}
 The notion of environment provides an abstraction over the physical environment. We introduced the idea of an abstract coordinate system, which lets the implementers use any unit or orientation (GPS coordinates, meters, pixels, or completely abstract units) as long as they stick to the same unit throughout the drone driver and task definitions. Because it is the drone driver, that is responsible for both supplying and consuming the current and target positions of the drone, the abstract unit system does not limit the framework to any particular assumptions about the positions.
 
