@@ -41,17 +41,17 @@ Inexpensiveness & & (\checkmark) & \checkmark & (\checkmark) &  & \checkmark
 \label{tab:topics}
 \end{table*}
 
-Both Altug et al.\,\cite{altugetal} and Ducard et. al.\,\cite{ducardetal} demonstrated the use of visual feedback for positioning and autonomous control of a drone. This was useful for the practical part of this project in which a kinect was used to track drones in order to autonomously perform tasks.
+Both Altug et al.\,\cite{altugetal} and Ducard et. al.\,\cite{ducardetal} demonstrated the use of visual feedback for positioning and autonomous control of a drone. This was useful for the practical part of this project in which a Kinect was used to track drones in order to autonomously perform tasks.
 
 Also relevant is the work of The Intelligent Mechatronics Lab at Boston University, in which a conductive surface was used to charge a drone without human interaction\,\cite{bostonuni}. This is of paramount importance in terms of realizing this solution, as full automation would not be possible unless the drone could charge itself without human interference.
 
-Finally, as an alternative to drone swarms, where battery issues are solved by an abundancy of drones, Abidali et. al.\,\cite{solarcopter} offered an alternative through the use of solar power. In their report, they outlined the design of SolarCopter, the worlds first solar-powered quadcopter capable of sustained flight.
+Finally, as an alternative to drone swarms, where battery issues are solved by an abundance of drones, Abidali et. al.\,\cite{solarcopter} offered an alternative through the use of solar power. In their report, they outlined the design of SolarCopter, the worlds first solar-powered quadcopter capable of sustained flight.
 
 B\"urkle et al. focused primarily on swarm usage and capabilities, but mentioned very little about how the actual replacement of the drones would work. We left the execution of a task as an extensible abstract concept, and specifically focused on providing automatic drone-swapping to implementers of these tasks while including implementation of basic tasks such as movement and landing.
 
 Ducard et. al. and Altug et. al. both showed that drone control through the use of a visual feedback system was possible, but the actual execution of tasks were highly specific and non-extensible for the common developer. We aimed at allowing developers the ability to easily define and perform tasks with drones, regardless of their tracking system.
 
-Sima Mitra focused on computer vision to return to a charging station. We noted that there are inherent problems in Computer Vision such as the need for an unobstructed view of the intended target, and argued that absolute positioning schemes such as GPS or external tracking of a drone would be more suitable, especially for swarm-based task execution in which the system needs a complete view of the operating area to simoultaneously use several drones.
+Sima Mitra focused on computer vision to return to a charging station. We noted that there are inherent problems in Computer Vision such as the need for an unobstructed view of the intended target, and argued that absolute positioning schemes such as GPS or external tracking of a drone would be more suitable, especially for swarm-based task execution in which the system needs a complete view of the operating area to simultaneously use several drones.
 
 While the work of Boston University indeed showed that conductive charging of aerial drones was possible, we primarily focused on getting a drone to the charging station, and left the addition of conductive charging as a means to further automate task execution efforts.
 
